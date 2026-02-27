@@ -20,7 +20,10 @@ app.use(
     frameguard: true
   })
 );
-app.use(cors());
+app.use(cors({
+  origin: "https://your-frontend.vercel.app",
+  credentials: true
+}));
 
 setupDB();
 require('./config/passport')(app);
