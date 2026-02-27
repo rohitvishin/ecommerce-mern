@@ -21,7 +21,7 @@ app.use(
   })
 );
 app.use(cors({
-  origin: "https://your-frontend.vercel.app",
+  origin: "https://ecommerce-mern-37yt.vercel.app/",
   credentials: true
 }));
 
