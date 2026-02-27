@@ -38,3 +38,5 @@ app.use(routes);
 // });
 
 // socket(server);
+
+module.exports = app;
