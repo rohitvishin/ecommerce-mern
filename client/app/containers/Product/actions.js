@@ -181,6 +181,26 @@ export const fetchProducts = () => {
   };
 };
 
+// fetch products api
+export const featuredProducts = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setProductLoading(true));
+
+      const response = await axios.get(`${API_URL}/product/featured`);
+
+      dispatch({
+        type: FETCH_PRODUCTS,
+        payload: response.data.products
+      });
+    } catch (error) {
+      handleError(error, dispatch);
+    } finally {
+      dispatch(setProductLoading(false));
+    }
+  };
+};
+
 // fetch product api
 export const fetchProduct = id => {
   return async (dispatch, getState) => {

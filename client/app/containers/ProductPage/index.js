@@ -55,7 +55,7 @@ class ProductPage extends React.PureComponent {
       reviewChange,
       reviewFormErrors
     } = this.props;
-
+    console.log(product);
     return (
       <div className='product-shop'>
         {isLoading ? (
@@ -67,11 +67,10 @@ class ProductPage extends React.PureComponent {
                 <div className='position-relative'>
                   <img
                     className='item-image'
-                    src={`${
-                      product.imageUrl
-                        ? product.imageUrl
-                        : '/images/placeholder-image.png'
-                    }`}
+                    src={`${product.imageUrl
+                      ? product.imageUrl
+                      : '/images/placeholder-image.png'
+                      }`}
                   />
                   {product.inventory <= 0 && !shopFormErrors['quantity'] ? (
                     <p className='stock out-of-stock'>Out of stock</p>
@@ -104,27 +103,43 @@ class ProductPage extends React.PureComponent {
                       <p className='price'>${product.price}</p>
                     </div>
                     <div className='item-customize'>
-                      <Input
-                        type={'number'}
-                        error={shopFormErrors['quantity']}
-                        label={'Quantity'}
-                        name={'quantity'}
-                        decimals={false}
-                        min={1}
-                        max={product.inventory}
-                        placeholder={'Product Quantity'}
-                        disabled={
-                          product.inventory <= 0 && !shopFormErrors['quantity']
-                        }
-                        value={productShopData.quantity}
-                        onInputChange={(name, value) => {
-                          productShopChange(name, value);
-                        }}
-                      />
+                      <label className='form-label fw-bold mb-2'>Quantity</label>
+                      <div className='d-flex align-items-center'>
+                        <button
+                          type='button'
+                          className='btn btn-outline-secondary px-3 py-1 fs-4'
+                          style={{ minWidth: 36, backgroundColor: '#d9dbdea1' }}
+                          disabled={productShopData.quantity <= 1}
+                          onClick={() =>
+                            productShopChange('quantity', Math.max(1, productShopData.quantity - 1))
+                          }
+                          aria-label='Decrease quantity'
+                        >
+                          −
+                        </button>
+                        <span className='mx-3 fs-5 fw-bold' style={{ minWidth: 32, textAlign: 'center' }}>
+                          {productShopData.quantity}
+                        </span>
+                        <button
+                          type='button'
+                          className='btn btn-outline-secondary px-3 py-1 fs-4'
+                          style={{ minWidth: 36, backgroundColor: '#d9dbdea1' }}
+                          disabled={productShopData.quantity >= product.inventory}
+                          onClick={() =>
+                            productShopChange('quantity', Math.min(product.inventory, productShopData.quantity + 1))
+                          }
+                          aria-label='Increase quantity'
+                        >
+                          +
+                        </button>
+                      </div>
+                      {shopFormErrors['quantity'] && (
+                        <div className='text-danger mt-1'>{shopFormErrors['quantity']}</div>
+                      )}
                     </div>
-                    <div className='my-4 item-share'>
+                    {/* <div className='my-4 item-share'>
                       <SocialShare product={product} />
-                    </div>
+                    </div> */}
                     <div className='item-actions'>
                       {itemInCart ? (
                         <Button
