@@ -100,7 +100,7 @@ const ProductFilter = props => {
           </div>
         </CardBody>
       </Card>
-      <Card>
+      {/* <Card>
         <CardHeader tag='h3'>Rating</CardHeader>
         <CardBody>
           <div className='mx-2 mb-4'>
@@ -115,7 +115,7 @@ const ProductFilter = props => {
             />
           </div>
         </CardBody>
-      </Card>
+      </Card> */}
     </div>
   );
 };

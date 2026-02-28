@@ -13,7 +13,7 @@ import actions from '../../actions';
 import banners from './banners.json';
 import CarouselSlider from '../../components/Common/CarouselSlider';
 import { responsiveOneItemCarousel } from '../../components/Common/CarouselSlider/utils';
-import ProductList from '../../components/Store/ProductList/';
+import ProductList from '../../components/Store/ProductList/featured';
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
 
 class Homepage extends React.PureComponent {

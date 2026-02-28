@@ -32,7 +32,16 @@ const AddProduct = props => {
 
   const handleSubmit = event => {
     event.preventDefault();
+    const button = document.getElementById("addProductBtn");
+    button.textContent = "Adding...";
+    if (button) {
+      button.disabled = true;
+    }
     addProduct();
+    setTimeout(() => {
+      button.disabled = false;
+      button.textContent = "Add Product";
+    }, 5000);
   };
 
   return (
@@ -158,7 +167,7 @@ const AddProduct = props => {
         </Row>
         <hr />
         <div className='add-product-actions'>
-          <Button type='submit' text='Add Product' />
+          <Button type='submit' id="addProductBtn" text='Add Product' />
         </div>
       </form>
     </div>

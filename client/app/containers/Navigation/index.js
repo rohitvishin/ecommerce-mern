@@ -82,8 +82,8 @@ class Navigation extends React.PureComponent {
           <img
             className='item-image'
             src={`${suggestion.imageUrl
-                ? suggestion.imageUrl
-                : '/images/placeholder-image.png'
+              ? suggestion.imageUrl
+              : '/images/placeholder-image.png'
               }`}
           />
           <div>
@@ -145,7 +145,7 @@ class Navigation extends React.PureComponent {
               </Col>
               <Col md='4' className='text-center d-none d-md-block'>
                 <i className='fa fa-credit-card' />
-                <span>Payment Methods</span>
+                <span>Cash On Delivery</span>
               </Col>
               <Col md='4' className='text-center d-none d-md-block'>
                 <i className='fa fa-phone' />
@@ -210,13 +210,16 @@ class Navigation extends React.PureComponent {
               className='desktop-hidden'
             >
               <div className='header-links'>
-                <Button
-                  borderless
-                  variant='empty'
-                  ariaLabel='open the menu'
-                  icon={<BarsIcon />}
-                  onClick={() => this.toggleMenu()}
-                />
+                {categories && categories.length > 0 && (
+                  <Button
+                    borderless
+                    variant='empty'
+                    ariaLabel='open the menu'
+                    icon={<BarsIcon />}
+                    onClick={() => this.toggleMenu()}
+                  />
+                )}
+
                 <CartIcon cartItems={cartItems} onClick={toggleCart} />
               </div>
             </Col>
