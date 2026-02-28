@@ -55,7 +55,6 @@ class ProductPage extends React.PureComponent {
       reviewChange,
       reviewFormErrors
     } = this.props;
-    console.log(product);
     return (
       <div className='product-shop'>
         {isLoading ? (

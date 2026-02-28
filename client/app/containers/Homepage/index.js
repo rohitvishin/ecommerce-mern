@@ -14,8 +14,10 @@ import banners from './banners.json';
 import CarouselSlider from '../../components/Common/CarouselSlider';
 import { responsiveOneItemCarousel } from '../../components/Common/CarouselSlider/utils';
 import ProductList from '../../components/Store/ProductList/';
+import LoadingIndicator from '../../components/Common/LoadingIndicator';
 
 class Homepage extends React.PureComponent {
+
   componentDidMount() {
     // Fetch products if not already loaded
     if (!this.props.products || this.props.products.length === 0) {
@@ -25,6 +27,7 @@ class Homepage extends React.PureComponent {
   }
 
   render() {
+    const isLoading = this.props.isLoading;
     // Select 4 featured products (could be improved to use a real featured flag)
     const featuredProducts = (this.props.products || []).slice(0, 4);
 
@@ -57,7 +60,11 @@ class Homepage extends React.PureComponent {
             </Col>
             <Col xs='12'>
               <Card className='border-0 rounded-4 p-4 premium-featured-card-bg'>
-                <ProductList products={featuredProducts} />
+                {isLoading ? (
+                  <LoadingIndicator />
+                ) :
+                  <ProductList products={featuredProducts} />
+                }
               </Card>
             </Col>
           </Row>
@@ -71,7 +78,8 @@ class Homepage extends React.PureComponent {
 
 const mapStateToProps = state => {
   return {
-    products: state.product.products
+    products: state.product.products,
+    isLoading: state.product.isLoading,
   };
 };
 
