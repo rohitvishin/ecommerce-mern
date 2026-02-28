@@ -10,7 +10,8 @@ const auth = require('../../middleware/auth');
 // Bring in Models & Helpers
 const User = require('../../models/user');
 const mailchimp = require('../../services/mailchimp');
-const mailgun = require('../../services/mailgun');
+// const mailgun = require('../../services/mailgun');
+const googlemail = require('../../services/googlemail');
 const keys = require('../../config/keys');
 const { EMAIL_PROVIDER, JWT_COOKIE } = require('../../constants');
 
@@ -132,7 +133,7 @@ router.post('/register', async (req, res) => {
       id: registeredUser.id
     };
 
-    await mailgun.sendEmail(
+    await googlemail.sendEmail(
       registeredUser.email,
       'signup',
       null,
@@ -186,7 +187,7 @@ router.post('/forgot', async (req, res) => {
 
     existingUser.save();
 
-    await mailgun.sendEmail(
+    await googlemail.sendEmail(
       existingUser.email,
       'reset',
       req.headers.host,
@@ -233,7 +234,7 @@ router.post('/reset/:token', async (req, res) => {
 
     resetUser.save();
 
-    await mailgun.sendEmail(resetUser.email, 'reset-confirmation');
+    await googlemail.sendEmail(resetUser.email, 'reset-confirmation');
 
     res.status(200).json({
       success: true,
@@ -280,7 +281,7 @@ router.post('/reset', auth, async (req, res) => {
     existingUser.password = hash;
     existingUser.save();
 
-    await mailgun.sendEmail(existingUser.email, 'reset-confirmation');
+    await googlemail.sendEmail(existingUser.email, 'reset-confirmation');
 
     res.status(200).json({
       success: true,

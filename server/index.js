@@ -20,23 +20,27 @@ app.use(
     frameguard: true
   })
 );
-app.use(cors({
-  origin: "https://ecommerce-mern-37yt.vercel.app",
-  credentials: true
-}));
+app.use(cors(
+  // re-add for vercel
+  // {
+  //   origin: "https://ecommerce-mern-37yt.vercel.app",
+  //   credentials: true
+  // }
+));
 
 setupDB();
 require('./config/passport')(app);
 app.use(routes);
 
-// const server = app.listen(port, () => {
-//   console.log(
-//     `${chalk.green('✓')} ${chalk.blue(
-//       `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
-//     )}`
-//   );
-// });
+// remove for vercel
+const server = app.listen(port, () => {
+  console.log(
+    `${chalk.green('✓')} ${chalk.blue(
+      `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
+    )}`
+  );
+});
+socket(server);
 
-// socket(server);
-
-module.exports = app;
+// re-add for vercel
+// module.exports = app;

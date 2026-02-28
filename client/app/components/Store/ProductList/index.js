@@ -38,11 +38,10 @@ const ProductList = props => {
                     <div className='item-image-box'>
                       <img
                         className='item-image'
-                        src={`${
-                          product.imageUrl
-                            ? product.imageUrl
-                            : '/images/placeholder-image.png'
-                        }`}
+                        src={`${product.imageUrl
+                          ? product.imageUrl
+                          : '/images/placeholder-image.png'
+                          }`}
                       />
                     </div>
                   </div>
@@ -65,9 +64,8 @@ const ProductList = props => {
                           {parseFloat(product?.averageRating).toFixed(1)}
                         </span>
                         <span
-                          className={`fa fa-star ${
-                            product.totalReviews !== 0 ? 'checked' : ''
-                          }`}
+                          className={`fa fa-star ${product.totalReviews !== 0 ? 'checked' : ''
+                            }`}
                           style={{ color: '#ffb302' }}
                         ></span>
                       </p>

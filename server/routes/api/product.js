@@ -20,6 +20,29 @@ const { ROLES } = require('../../constants');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+router.get(
+  '/featured',
+  async (req, res) => {
+    try {
+      // Fetch 4 most recent active products and populate brand info
+      const products = await Product.find({ isActive: true })
+        .sort({ createdAt: -1 })
+        .limit(4)
+        .populate({
+          path: 'brand',
+          select: 'name isActive slug'
+        });
+
+      res.status(200).json({
+        products
+      });
+    } catch (error) {
+      res.status(400).json({
+        error: 'Your request could not be processed. Please try again.'
+      });
+    }
+  }
+);
 // fetch product slug api
 router.get('/item/:slug', async (req, res) => {
   try {
@@ -424,5 +447,6 @@ router.delete(
     }
   }
 );
+
 
 module.exports = router;
