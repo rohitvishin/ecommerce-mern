@@ -88,13 +88,14 @@ export const filterProducts = (n, v) => {
   return async (dispatch, getState) => {
     try {
       dispatch(setProductLoading(true));
+      const store = localStorage.getItem('store');
       const advancedFilters = getState().product.advancedFilters;
       const payload = productsFilterOrganizer(n, v, advancedFilters);
 
       dispatch({ type: SET_ADVANCED_FILTERS, payload });
       const sortOrder = getSortOrder(payload.order);
       const response = await axios.get(`${API_URL}/product/list`, {
-        params: { ...payload, sortOrder }
+        params: { ...payload, sortOrder, store }
       });
       const { products, totalPages, currentPage, count } = response.data;
 
@@ -182,13 +183,14 @@ export const fetchProducts = () => {
 };
 
 // fetch products api
-export const featuredProducts = () => {
+export const featuredProducts = (storeName) => {
   return async (dispatch, getState) => {
     try {
       dispatch(setProductLoading(true));
 
-      const response = await axios.get(`${API_URL}/product/featured`);
-
+      const response = await axios.get(`${API_URL}/product/featured`, {
+        params: { store: storeName }
+      });
       dispatch({
         type: FETCH_PRODUCTS,
         payload: response.data.products
@@ -232,7 +234,7 @@ export const fetchProduct = id => {
 };
 
 // add product api
-export const addProduct = () => {
+export const addProduct = (dispatch, getState) => {
   return async (dispatch, getState) => {
     try {
       const rules = {
@@ -249,7 +251,6 @@ export const addProduct = () => {
       const product = getState().product.productFormData;
       const user = getState().account.user;
       const brands = getState().brand.brandsSelect;
-
       const brand = unformatSelectOptions([product.brand]);
 
       const newProduct = {
@@ -261,6 +262,7 @@ export const addProduct = () => {
         image: product.image,
         isActive: product.isActive,
         taxable: product.taxable.value,
+        store: brands[1].label,
         brand:
           user.role !== ROLES.Merchant
             ? brand !== 0
@@ -299,7 +301,6 @@ export const addProduct = () => {
           }
         }
       }
-
       const response = await axios.post(`${API_URL}/product/add`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });

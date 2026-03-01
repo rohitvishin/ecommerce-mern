@@ -35,6 +35,7 @@ import MiniBrand from '../../components/Store//MiniBrand';
 import Menu from '../NavigationMenu';
 import Cart from '../Cart';
 
+
 class Navigation extends React.PureComponent {
   componentDidMount() {
     this.props.fetchStoreBrands();
@@ -59,7 +60,6 @@ class Navigation extends React.PureComponent {
     const BoldName = (suggestion, query) => {
       const matches = AutosuggestHighlightMatch(suggestion.name, query);
       const parts = AutosuggestHighlightParse(suggestion.name, matches);
-
       return (
         <div>
           {parts.map((part, index) => {
@@ -125,7 +125,8 @@ class Navigation extends React.PureComponent {
       onSuggestionsFetchRequested,
       onSuggestionsClearRequested
     } = this.props;
-
+    const merchant = localStorage.getItem('store');
+    console.log(merchant);
     const inputProps = {
       placeholder: 'Search Products',
       value: searchValue,
@@ -178,8 +179,8 @@ class Navigation extends React.PureComponent {
                     onClick={() => this.toggleMenu()}
                   />
                 )}
-                <Link to='/'>
-                  <h1 className='logo'>ZOSTORE</h1>
+                <Link to={`/${merchant}/`}>
+                  <h1 className='logo'>{merchant}</h1>
                 </Link>
               </div>
             </Col>
@@ -237,36 +238,7 @@ class Navigation extends React.PureComponent {
                   onClick={toggleCart}
                 />
                 <Nav navbar>
-                  {brands && brands.length > 0 && (
-                    <Dropdown
-                      nav
-                      inNavbar
-                      toggle={() => this.toggleBrand()}
-                      isOpen={isBrandOpen}
-                    >
-                      <DropdownToggle nav>
-                        Brands
-                        <span className='fa fa-chevron-down dropdown-caret'></span>
-                      </DropdownToggle>
-                      <DropdownMenu right className='nav-brand-dropdown'>
-                        <div className='mini-brand'>
-                          <MiniBrand
-                            brands={brands}
-                            toggleBrand={() => this.toggleBrand()}
-                          />
-                        </div>
-                      </DropdownMenu>
-                    </Dropdown>
-                  )}
-                  <NavItem>
-                    <NavLink
-                      tag={ActiveLink}
-                      to='/shop'
-                      activeClassName='active'
-                    >
-                      Shop
-                    </NavLink>
-                  </NavItem>
+
                   {authenticated ? (
                     <UncontrolledDropdown nav inNavbar>
                       <DropdownToggle nav>
@@ -275,7 +247,7 @@ class Navigation extends React.PureComponent {
                       </DropdownToggle>
                       <DropdownMenu right>
                         <DropdownItem
-                          onClick={() => history.push('/dashboard')}
+                          onClick={() => history.push(`/${merchant}/dashboard`)}
                         >
                           Dashboard
                         </DropdownItem>
@@ -289,10 +261,10 @@ class Navigation extends React.PureComponent {
                         <span className='fa fa-chevron-down dropdown-caret'></span>
                       </DropdownToggle>
                       <DropdownMenu right>
-                        <DropdownItem onClick={() => history.push('/login')}>
+                        <DropdownItem onClick={() => history.push(`/${merchant}/login`)}>
                           Login
                         </DropdownItem>
-                        <DropdownItem onClick={() => history.push('/register')}>
+                        <DropdownItem onClick={() => history.push(`/${merchant}/register`)}>
                           Sign Up
                         </DropdownItem>
                       </DropdownMenu>
@@ -335,7 +307,7 @@ class Navigation extends React.PureComponent {
             onClick={toggleMenu}
           />
         </div>
-      </header>
+      </header >
     );
   }
 }

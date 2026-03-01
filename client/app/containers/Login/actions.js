@@ -60,6 +60,7 @@ export const login = () => {
       const response = await axios.post(`${API_URL}/auth/login`, user);
 
       const firstName = response.data.user.firstName;
+      const store = user.store;
 
       const successfulOptions = {
         title: `Hey${firstName ? ` ${firstName}` : ''}, Welcome Back!`,
@@ -68,6 +69,7 @@ export const login = () => {
       };
 
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('store', store);
 
       setToken(response.data.token);
 
@@ -92,12 +94,13 @@ export const signOut = () => {
       position: 'tr',
       autoDismiss: 1
     };
-
+    const store = localStorage.getItem('store');
     dispatch(clearAuth());
     dispatch(clearAccount());
-    dispatch(push('/login'));
+    dispatch(push(`/${store}/login`));
 
     localStorage.removeItem('token');
+    localStorage.removeItem('store');
 
     dispatch(success(successfulOptions));
     // dispatch(clearCart());

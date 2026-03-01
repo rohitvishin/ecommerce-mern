@@ -53,6 +53,10 @@ const ProductSchema = new Schema({
     ref: 'Brand',
     default: null
   },
+  store: {
+    type: String,
+    default: null
+  },
   updated: Date,
   created: {
     type: Date,

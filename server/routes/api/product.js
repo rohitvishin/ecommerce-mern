@@ -16,6 +16,7 @@ const {
   getStoreProductsWishListQuery
 } = require('../../utils/queries');
 const { ROLES } = require('../../constants');
+const brand = require('../../models/brand');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -32,7 +33,6 @@ router.get(
           path: 'brand',
           select: 'name isActive slug'
         });
-
       res.status(200).json({
         products
       });
@@ -110,6 +110,7 @@ router.get('/list', async (req, res) => {
       min,
       category,
       brand,
+      store,
       page = 1,
       limit = 10
     } = req.query;
@@ -145,6 +146,12 @@ router.get('/list', async (req, res) => {
         $match: {
           'brand._id': { $eq: brandDoc._id }
         }
+      });
+    }
+
+    if (store) {
+      basicQuery.unshift({
+        $match: { store }
       });
     }
 
@@ -214,6 +221,7 @@ router.post(
       const taxable = req.body.taxable;
       const isActive = req.body.isActive;
       const brand = req.body.brand;
+      const store = req.body.store;
       const image = req.file;
 
       if (!sku) {
@@ -251,6 +259,7 @@ router.post(
         taxable,
         isActive,
         brand,
+        store,
         imageUrl,
         imageKey
       });

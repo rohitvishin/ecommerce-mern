@@ -9,6 +9,7 @@ const auth = require('../../middleware/auth');
 
 // Bring in Models & Helpers
 const User = require('../../models/user');
+const Merchant = require('../../models/merchant');
 const mailchimp = require('../../services/mailchimp');
 // const mailgun = require('../../services/mailgun');
 const googlemail = require('../../services/googlemail');
@@ -19,7 +20,7 @@ const { secret, tokenLife } = keys.jwt;
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, store } = req.body;
 
     if (!email) {
       return res
@@ -30,12 +31,12 @@ router.post('/login', async (req, res) => {
     if (!password) {
       return res.status(400).json({ error: 'You must enter a password.' });
     }
-
     const user = await User.findOne({ email });
-    if (!user) {
+    const vendor = await Merchant.findOne({ brandName: store });
+    if (!user || !vendor) {
       return res
         .status(400)
-        .send({ error: 'No user found for this email address.' });
+        .send({ error: 'Invalid user or store url.' });
     }
 
     if (user && user.provider !== EMAIL_PROVIDER.Email) {
@@ -83,8 +84,14 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, firstName, lastName, password, isSubscribed } = req.body;
-
+    const { email, firstName, lastName, password, isSubscribed, merchant } = req.body;
+    const store = await Merchant.findOne({ brandName: merchant });
+    if (!store) {
+      return res
+        .status(400)
+        .json({ error: 'Store not found.' });
+    }
+    const storeId = store.brandName;
     if (!email) {
       return res
         .status(400)
@@ -120,7 +127,8 @@ router.post('/register', async (req, res) => {
       email,
       password,
       firstName,
-      lastName
+      lastName,
+      storeId
     });
 
     const salt = await bcrypt.genSalt(10);

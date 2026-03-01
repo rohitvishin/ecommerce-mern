@@ -73,9 +73,9 @@ const AddMerchant = props => {
             <Input
               type={'text'}
               error={formErrors['brandName']}
-              label={'Brand'}
+              label={'Store Name'}
               name={'brandName'}
-              placeholder={'Your Business Brand'}
+              placeholder={'Your Store Name'}
               value={merchantFormData.brand}
               onInputChange={(name, value) => {
                 merchantChange(name, value);

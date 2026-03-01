@@ -33,8 +33,8 @@ class Signup extends React.PureComponent {
     } = this.props;
 
     if (authenticated) return <Redirect to='/dashboard' />;
-
     const handleSubmit = event => {
+      signupFormData.merchant = this.props.match.params.merchant
       event.preventDefault();
       signUp();
     };
