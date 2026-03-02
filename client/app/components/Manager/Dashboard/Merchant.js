@@ -36,7 +36,6 @@ const Merchant = props => {
               <Route path='/dashboard/product' component={Product} />
               <Route path='/dashboard/brand' component={Brand} />
               <Route path='/dashboard/orders' component={Order} />
-              <Route path='/dashboard/wishlist' component={Wishlist} />
               <Route path='*' component={Page404} />
             </Switch>
           </div>

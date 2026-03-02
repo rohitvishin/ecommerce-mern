@@ -34,6 +34,7 @@ import { BarsIcon } from '../../components/Common/Icon';
 import MiniBrand from '../../components/Store//MiniBrand';
 import Menu from '../NavigationMenu';
 import Cart from '../Cart';
+import { ROLES } from '../../constants';
 
 
 class Navigation extends React.PureComponent {
@@ -179,30 +180,50 @@ class Navigation extends React.PureComponent {
                     onClick={() => this.toggleMenu()}
                   />
                 )}
-                <Link to={`/${merchant}/`}>
-                  <h1 className='logo'>{merchant}</h1>
-                </Link>
+                {
+                  user.role === ROLES.Member ? (
+                    <Link to={`/${merchant}/`}>
+                      <h1 className='logo'>{merchant}</h1>
+                    </Link>
+                  ) : <h1 className='logo'>{merchant}</h1>
+                }
+
               </div>
             </Col>
-            <Col
-              xs={{ size: 12, order: 4 }}
-              sm={{ size: 12, order: 4 }}
-              md={{ size: 12, order: 4 }}
-              lg={{ size: 5, order: 2 }}
-              className='pt-2 pt-lg-0'
-            >
-              <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={this.getSuggestionValue}
-                renderSuggestion={this.renderSuggestion}
-                inputProps={inputProps}
-                onSuggestionSelected={(_, item) => {
-                  history.push(`/product/${item.suggestion.slug}`);
-                }}
-              />
-            </Col>
+            {
+              user.role === ROLES.Member ? (
+                <Col
+                  xs={{ size: 12, order: 4 }}
+                  sm={{ size: 12, order: 4 }}
+                  md={{ size: 12, order: 4 }}
+                  lg={{ size: 5, order: 2 }}
+                  className='pt-2 pt-lg-0'
+                >
+                  <Autosuggest
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    getSuggestionValue={this.getSuggestionValue}
+                    renderSuggestion={this.renderSuggestion}
+                    inputProps={inputProps}
+                    onSuggestionSelected={(_, item) => {
+                      history.push(`/product/${item.suggestion.slug}`);
+                    }}
+                  />
+                </Col>
+              )
+                : <Col
+                  xs={{ size: 12, order: 4 }}
+                  sm={{ size: 12, order: 4 }}
+                  md={{ size: 12, order: 4 }}
+                  lg={{ size: 5, order: 2 }}
+                  className='pt-2 pt-lg-0'
+                >
+                  <div>
+                    <h2>MANAGE STORE</h2>
+                  </div>
+                </Col>
+            }
             <Col
               xs={{ size: 12, order: 2 }}
               sm={{ size: 12, order: 2 }}
