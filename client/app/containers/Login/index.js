@@ -34,7 +34,7 @@ class Login extends React.PureComponent {
     loginFormData.store = merchant;
     localStorage.setItem('store', merchant)
     const registerLink = () => {
-      this.props.history.push('/register');
+      this.props.history.push(`/${merchant}/register`);
     };
 
     const handleSubmit = event => {
@@ -107,7 +107,7 @@ class Login extends React.PureComponent {
             </div>
             <Link
               className='redirect-link forgot-password-link'
-              to={'/forgot-password'}
+              to={`/${merchant}/forgot-password`}
             >
               Forgot Password?
             </Link>

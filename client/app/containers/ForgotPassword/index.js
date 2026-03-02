@@ -24,7 +24,7 @@ class ForgotPassword extends React.PureComponent {
       forgotPasswordChange,
       forgotPassowrd
     } = this.props;
-
+    const { merchant } = this.props.match.params;
     if (authenticated) return <Redirect to='/dashboard' />;
 
     const handleSubmit = event => {
@@ -60,7 +60,7 @@ class ForgotPassword extends React.PureComponent {
               text='Send Email'
               className='mb-3 mb-md-0'
             />
-            <Link className='redirect-link' to={'/login'}>
+            <Link className='redirect-link' to={`/${merchant}/login`}>
               Back to login
             </Link>
           </div>

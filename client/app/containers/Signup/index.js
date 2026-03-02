@@ -31,10 +31,10 @@ class Signup extends React.PureComponent {
       signUp,
       subscribeChange
     } = this.props;
-
+    const merchant = this.props.match.params.merchant;
     if (authenticated) return <Redirect to='/dashboard' />;
     const handleSubmit = event => {
-      signupFormData.merchant = this.props.match.params.merchant
+      signupFormData.merchant = this.props.match.params.merchant;
       event.preventDefault();
       signUp();
     };
@@ -126,7 +126,7 @@ class Signup extends React.PureComponent {
               text='Sign Up'
               disabled={isSubmitting}
             />
-            <Link className='mt-3 mt-md-0 redirect-link' to={'/login'}>
+            <Link className='mt-3 mt-md-0 redirect-link' to={`/${merchant}/login`}>
               Back to login
             </Link>
           </div>
