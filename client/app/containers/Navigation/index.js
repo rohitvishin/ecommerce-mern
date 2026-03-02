@@ -181,11 +181,12 @@ class Navigation extends React.PureComponent {
                   />
                 )}
                 {
-                  user.role === ROLES.Member ? (
+                  user.role === ROLES.Merchant ? (
+                    <h1 className='logo'>{merchant}</h1>
+                  ) :
                     <Link to={`/${merchant}/`}>
                       <h1 className='logo'>{merchant}</h1>
                     </Link>
-                  ) : <h1 className='logo'>{merchant}</h1>
                 }
 
               </div>
@@ -253,11 +254,14 @@ class Navigation extends React.PureComponent {
             // className='px-0'
             >
               <Navbar color='light' light expand='md' className='mt-1 mt-md-0'>
-                <CartIcon
-                  className='d-none d-md-block'
-                  cartItems={cartItems}
-                  onClick={toggleCart}
-                />
+                {user.role === ROLES.Member ? (
+                  <CartIcon
+                    className='d-none d-md-block'
+                    cartItems={cartItems}
+                    onClick={toggleCart}
+                  />
+                ) : ''}
+
                 <Nav navbar>
 
                   {authenticated ? (
@@ -270,7 +274,7 @@ class Navigation extends React.PureComponent {
                         <DropdownItem
                           onClick={() => history.push(`/dashboard`)}
                         >
-                          Dashboard
+                          {user.role === ROLES.Member ? 'Account' : 'Dashboard'}
                         </DropdownItem>
                         <DropdownItem onClick={signOut}>Sign Out</DropdownItem>
                       </DropdownMenu>

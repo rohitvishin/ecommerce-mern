@@ -32,6 +32,7 @@ class Login extends React.PureComponent {
     if (authenticated) return <Redirect to='/dashboard' />;
     const { merchant } = this.props.match.params;
     loginFormData.store = merchant;
+    localStorage.setItem('store', merchant)
     const registerLink = () => {
       this.props.history.push('/register');
     };
