@@ -247,7 +247,7 @@ class Navigation extends React.PureComponent {
                       </DropdownToggle>
                       <DropdownMenu right>
                         <DropdownItem
-                          onClick={() => history.push(`/${merchant}/dashboard`)}
+                          onClick={() => history.push(`/dashboard`)}
                         >
                           Dashboard
                         </DropdownItem>
