@@ -127,7 +127,6 @@ class Navigation extends React.PureComponent {
       onSuggestionsClearRequested
     } = this.props;
     const merchant = localStorage.getItem('store');
-    console.log(merchant);
     const inputProps = {
       placeholder: 'Search Products',
       value: searchValue,
@@ -155,7 +154,7 @@ class Navigation extends React.PureComponent {
               </Col>
               <Col xs='12' className='text-center d-block d-md-none'>
                 <i className='fa fa-phone' />
-                <span> Need advice? Call us 951-999-9999</span>
+                <span> Need Support? Call us 951-999-9999</span>
               </Col>
             </Row>
           </Container>
@@ -170,16 +169,7 @@ class Navigation extends React.PureComponent {
               className='pr-0'
             >
               <div className='brand'>
-                {categories && categories.length > 0 && (
-                  <Button
-                    borderless
-                    variant='empty'
-                    className='d-none d-md-block'
-                    ariaLabel='open the menu'
-                    icon={<BarsIcon />}
-                    onClick={() => this.toggleMenu()}
-                  />
-                )}
+
                 {
                   user.role === ROLES.Merchant ? (
                     <h1 className='logo'>{merchant}</h1>

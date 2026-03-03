@@ -292,3 +292,23 @@ export const deleteMerchant = (merchant, search, page) => {
     }
   };
 };
+
+export const findMerchant = (brandName) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get(`${API_URL}/merchant/find`, {
+        params: {
+          brandName
+        }
+      });
+      if (response.status !== 200 || !response.data.valid) {
+        alert('Invalid store. Redirecting to home.');
+        dispatch(push('/'));
+      }
+    } catch (error) {
+      alert('Invalid store. Redirecting to home.');
+      dispatch(push('/'));
+      handleError(error, dispatch);
+    }
+  };
+};

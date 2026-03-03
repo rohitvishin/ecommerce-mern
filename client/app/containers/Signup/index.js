@@ -19,6 +19,10 @@ import LoadingIndicator from '../../components/Common/LoadingIndicator';
 import SignupProvider from '../../components/Common/SignupProvider';
 
 class Signup extends React.PureComponent {
+  componentDidMount() {
+    const { merchant } = this.props.match.params;
+    this.props.findMerchant(merchant);
+  }
   render() {
     const {
       authenticated,

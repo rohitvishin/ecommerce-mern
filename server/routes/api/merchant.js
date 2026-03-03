@@ -94,6 +94,27 @@ router.get('/search', auth, role.check(ROLES.Admin), async (req, res) => {
   }
 });
 
+router.get('/find', async (req, res) => {
+  try {
+    const { brandName } = req.query;
+    console.log('finding merchant with brandName:', brandName);
+    const merchant = await Merchant.findOne({ brandName: brandName, isActive: true });
+
+    if (!merchant) {
+      return res.status(404).json({
+        error: 'Merchant not found.'
+      });
+    }
+    res.status(200).json({
+      valid: true,
+      merchant
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: 'Your request could not be processed. Please try again.'
+    });
+  }
+});
 // fetch all merchants api
 router.get('/', auth, role.check(ROLES.Admin), async (req, res) => {
   try {
