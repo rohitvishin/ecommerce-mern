@@ -16,7 +16,7 @@ import actions from '../../actions';
 import Login from '../Login';
 import Signup from '../Signup';
 import MerchantSignup from '../MerchantSignup';
-import HomePage from '../Homepage';
+import Website from '../Website';
 import Dashboard from '../Dashboard';
 import Support from '../Support';
 import Navigation from '../Navigation';
@@ -75,6 +75,7 @@ class Application extends React.PureComponent {
   render() {
     return (
       <div className='application'>
+        <Route exact path="/" component={Website} />
         <Route path="/:merchant">
           <Notification />
           <Navigation />
