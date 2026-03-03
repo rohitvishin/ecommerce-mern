@@ -270,20 +270,23 @@ class Navigation extends React.PureComponent {
                       </DropdownMenu>
                     </UncontrolledDropdown>
                   ) : (
-                    <UncontrolledDropdown nav inNavbar>
-                      <DropdownToggle nav>
-                        Welcome!
-                        <span className='fa fa-chevron-down dropdown-caret'></span>
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem onClick={() => history.push(`/${merchant}/login`)}>
-                          Login
-                        </DropdownItem>
-                        <DropdownItem onClick={() => history.push(`/${merchant}/register`)}>
-                          Sign Up
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledDropdown>
+                    merchant !== 'null' && merchant !== null ?
+                      (
+                        <UncontrolledDropdown nav inNavbar>
+                          <DropdownToggle nav>
+                            Welcome!
+                            <span className='fa fa-chevron-down dropdown-caret'></span>
+                          </DropdownToggle>
+                          <DropdownMenu right>
+                            <DropdownItem onClick={() => history.push(`/${merchant}/login`)}>
+                              Login
+                            </DropdownItem>
+                            <DropdownItem onClick={() => history.push(`/${merchant}/register`)}>
+                              Sign Up
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      ) : ''
                   )}
                 </Nav>
               </Navbar>

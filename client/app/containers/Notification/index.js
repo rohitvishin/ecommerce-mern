@@ -12,11 +12,10 @@ import Notifications from 'react-notification-system-redux';
 import actions from '../../actions';
 
 class Notification extends React.PureComponent {
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     const { notifications } = this.props;
-
     const style = {
       NotificationItem: {
         DefaultStyle: {

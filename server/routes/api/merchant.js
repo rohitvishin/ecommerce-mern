@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-
+const jwt = require('jsonwebtoken');
 // Bring in Models & Helpers
 const { MERCHANT_STATUS, ROLES } = require('../../constants');
 const Merchant = require('../../models/merchant');
@@ -12,7 +12,8 @@ const auth = require('../../middleware/auth');
 const role = require('../../middleware/role');
 // const mailgun = require('../../services/mailgun');
 const googlemail = require('../../services/googlemail');
-
+const keys = require('../../config/keys');
+const { secret, tokenLife } = keys.jwt;
 // add merchant api
 router.post('/add', async (req, res) => {
   try {
@@ -97,7 +98,6 @@ router.get('/search', auth, role.check(ROLES.Admin), async (req, res) => {
 router.get('/find', async (req, res) => {
   try {
     const { brandName } = req.query;
-    console.log('finding merchant with brandName:', brandName);
     const merchant = await Merchant.findOne({ brandName: brandName, isActive: true });
 
     if (!merchant) {
@@ -222,7 +222,88 @@ router.put('/reject/:id', auth, async (req, res) => {
     });
   }
 });
+router.post('/signup', async (req, res) => {
+  try {
+    const { email, firstName, lastName, password, storeName, business, phone } = req.body;
+    if (!email) {
+      return res
+        .status(400)
+        .json({ error: 'You must enter an email address.' });
+    }
 
+    if (!firstName || !lastName) {
+      return res.status(400).json({ error: 'You must enter your full name.' });
+    }
+
+    if (!password) {
+      return res.status(400).json({ error: 'You must enter a password.' });
+    }
+    if (!/^[a-zA-Z0-9]+$/.test(storeName)) {
+      return res.status(400).json({ error: 'Store name can only contain letters and numbers.' });
+    }
+    const store = await Merchant.findOne({ brandName: storeName });
+    if (store) {
+      return res
+        .status(400)
+        .json({ error: 'Store already exists.' });
+    }
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: 'That email address is already in use.' });
+    }
+    const user = new User({
+      email,
+      password,
+      firstName,
+      lastName,
+      storeId: storeName
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(user.password, salt);
+
+    user.password = hash;
+    const registeredUser = await user.save();
+    //create user account for merchant
+    const merchant = new Merchant({
+      firstName,
+      email,
+      business: business,
+      phoneNumber: phone,
+      brandName: storeName,
+      status: MERCHANT_STATUS.Approved,
+      isActive: true
+    });
+    const merchantDoc = await merchant.save();
+    //create merchant store' brand
+    await createMerchantBrand(merchantDoc);
+
+    //update merchant user with store 
+    const query = { _id: registeredUser._id };
+    const update = {
+      merchant: merchantDoc._id,
+      role: ROLES.Merchant
+    };
+
+
+    await User.findOneAndUpdate(query, update, {
+      new: true
+    });
+    //send mail to merchant about successful signup
+    await googlemail.sendEmail(email, 'merchant-application');
+
+    res.status(200).json({
+      success: true
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: error.message || 'Your request could not be processed. Please try again.'
+    });
+  }
+});
 router.post('/signup/:token', async (req, res) => {
   try {
     const { email, firstName, lastName, password } = req.body;
@@ -240,7 +321,10 @@ router.post('/signup/:token', async (req, res) => {
     if (!password) {
       return res.status(400).json({ error: 'You must enter a password.' });
     }
-
+    //create user account for merchant
+    //create merchant store
+    //update merchant with store
+    //send mail to merchant about successful signup
     const userDoc = await User.findOne({
       email,
       resetPasswordToken: req.params.token
@@ -273,7 +357,7 @@ router.post('/signup/:token', async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });
@@ -324,7 +408,6 @@ const createMerchantBrand = async ({ _id, brandName, business }) => {
     merchant: _id,
     isActive: false
   });
-
   const brandDoc = await newBrand.save();
 
   const update = {
@@ -351,9 +434,7 @@ const createMerchantUser = async (email, name, merchant, host) => {
     });
 
     await createMerchantBrand(merchantDoc);
-
     await googlemail.sendEmail(email, 'merchant-welcome', null, name);
-
     return await User.findOneAndUpdate(query, update, {
       new: true
     });

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import {
     Container,
     Row,
@@ -40,22 +41,27 @@ const Website = () => {
                             </p>
 
                             <div>
-                                <Button
-                                    color="primary"
-                                    size="lg"
-                                    className="rounded-pill px-5 me-3"
-                                >
-                                    Start Free Trial
-                                </Button>
+                                <Link to="/signup">
+                                    <Button
+                                        color="primary"
+                                        size="lg"
+                                        className="rounded-pill px-5 me-3"
+                                    >
+                                        Start Free Trial
+                                    </Button>
+                                </Link>
 
-                                <Button
-                                    outline
-                                    color="dark"
-                                    size="lg"
-                                    className="rounded-pill px-5"
-                                >
-                                    Book Demo
-                                </Button>
+
+                                <Link to="/zoekart/" target="_blank" rel="noopener noreferrer">
+                                    <Button
+                                        outline
+                                        color="dark"
+                                        size="lg"
+                                        className="rounded-pill px-5"
+                                    >
+                                        Book Demo
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </Col>

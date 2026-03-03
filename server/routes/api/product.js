@@ -213,7 +213,7 @@ router.post(
   upload.single('image'),
   async (req, res) => {
     try {
-      const sku = req.body.sku;
+      const sku = req.body.store + '_' + req.body.sku;
       const name = req.body.name;
       const description = req.body.description;
       const quantity = req.body.quantity;

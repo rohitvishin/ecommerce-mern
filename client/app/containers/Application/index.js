@@ -94,6 +94,11 @@ class Application extends React.PureComponent {
                   <Route path='/admin/login' component={Login} />
                   <Route path='/admin/register' component={Signup} />
                   <Route
+                    exact
+                    path='/signup'
+                    component={MerchantSignup}
+                  />
+                  <Route
                     path='/merchant-signup/:token'
                     component={MerchantSignup}
                   />
