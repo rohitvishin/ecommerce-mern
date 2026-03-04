@@ -252,7 +252,7 @@ export const merchantSignUp = token => {
 
       dispatch(signOut());
       dispatch(success(successfulOptions));
-      dispatch(push('/login'));
+      dispatch(goBack());
       dispatch({ type: SIGNUP_RESET });
     } catch (error) {
       const title = `Please try to signup again!`;
@@ -344,6 +344,7 @@ export const deleteMerchant = (merchant, search, page) => {
 export const findMerchant = (brandName) => {
   return async (dispatch, getState) => {
     try {
+      console.log('Finding merchant with brand name:', brandName);
       const response = await axios.get(`${API_URL}/merchant/find`, {
         params: {
           brandName

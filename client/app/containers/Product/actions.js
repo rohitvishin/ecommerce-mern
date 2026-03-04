@@ -260,7 +260,7 @@ export const addProduct = (dispatch, getState) => {
         price: product.price,
         quantity: product.quantity,
         image: product.image,
-        isActive: product.isActive,
+        isActive: user.role === ROLES.Admin ? true : false,
         taxable: product.taxable.value,
         store: brands[1].label,
         brand:
@@ -342,7 +342,7 @@ export const updateProduct = () => {
       };
 
       const product = getState().product.product;
-
+      const user = getState().account.user;
       const brand = unformatSelectOptions([product.brand]);
 
       const newProduct = {
@@ -353,7 +353,8 @@ export const updateProduct = () => {
         quantity: product.quantity,
         price: product.price,
         taxable: product.taxable,
-        brand: brand != 0 ? brand : null
+        brand: brand != 0 ? brand : null,
+        isActive: user.role === ROLES.Admin ? true : false
       };
 
       const { isValid, errors } = allFieldsValidation(newProduct, rules, {

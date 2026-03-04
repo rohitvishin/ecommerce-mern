@@ -54,7 +54,7 @@ router.post('/add', async (req, res) => {
     });
     const merchantDoc = await merchant.save();
 
-    await googlemail.sendEmail(email, 'merchant-application');
+    await googlemail.sendEmail(email, 'merchant-application', req.headers.host);
 
     res.status(200).json({
       success: true,
@@ -154,7 +154,7 @@ router.put('/:id/active', auth, async (req, res) => {
 
     if (!update.isActive) {
       await deactivateBrand(merchantId);
-      await googlemail.sendEmail(merchantDoc.email, 'merchant-deactivate-account');
+      await googlemail.sendEmail(merchantDoc.email, 'merchant-deactivate-account', req.headers.host, { name: merchantDoc.brandName });
     }
 
     res.status(200).json({
@@ -293,7 +293,7 @@ router.post('/signup', async (req, res) => {
       new: true
     });
     //send mail to merchant about successful signup
-    await googlemail.sendEmail(email, 'merchant-welcome', null, { name: shopName });
+    await googlemail.sendEmail(email, 'merchant-welcome', req.headers.host, shopName);
 
     res.status(200).json({
       success: true

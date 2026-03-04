@@ -97,12 +97,12 @@ export const signOut = () => {
     const store = localStorage.getItem('store');
     dispatch(clearAuth());
     dispatch(clearAccount());
-    dispatch(push(`/${store}/login`));
-
     localStorage.removeItem('token');
     localStorage.removeItem('store');
-
     dispatch(success(successfulOptions));
     dispatch(clearCart());
+    const redirectPath = `/${store}/login`;
+    console.log(redirectPath);
+    dispatch(push(redirectPath));
   };
 };

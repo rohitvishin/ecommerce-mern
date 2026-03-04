@@ -35,22 +35,35 @@ exports.merchantSignup = (host, { resetToken, email }) => {
   return message;
 };
 
-exports.merchantWelcome = name => {
+exports.merchantWelcome = (host, name) => {
   const message = {
     subject: 'Merchant Registration',
     text:
       `Hi ${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
-      `Your store link https://zoekart/${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
+      `Your store link https://${host}/${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
       `It looks like you already have a member account with us. Please sign in with your member credentials and you will be able to see your merchant account.`
   };
 
   return message;
 };
 
-exports.signupEmail = name => {
+exports.productActivatedEmail = (host, productName) => {
+  const message = {
+    subject: 'Product Activated',
+    text:
+      `Hi! Your product ${productName.name} has been activated by admin and is now live on your store. \n\n` +
+      `Your product link http://${host}/product/${productName.slug} \n\n`
+  };
+
+  return message;
+};
+exports.signupEmail = (host, name) => {
   const message = {
     subject: 'Account Registration',
-    text: `Hi ${name.firstName} ${name.lastName}! Thank you for creating an account with us!.`
+    text: `Hi ${name.firstName} ${name.lastName}! Thank you for creating an account with us!. \n\n` +
+      `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
+      `http://${host}/${name.storeId}\n\n` +
+      `If you did not request this, please ignore this email and your account will remain unchanged.\n`
   };
 
   return message;
@@ -76,20 +89,20 @@ exports.contactEmail = () => {
   return message;
 };
 
-exports.merchantApplicationEmail = () => {
+exports.merchantApplicationEmail = (host) => {
   const message = {
-    subject: 'Sell on ZOSTORE',
+    subject: `Sell on ${host}`,
     text: `We received your request! Our team will contact you soon. \n\n`
   };
 
   return message;
 };
 
-exports.merchantDeactivateAccount = () => {
+exports.merchantDeactivateAccount = (host, name) => {
   const message = {
-    subject: 'Merchant account on ZOSTORE',
+    subject: `Merchant account on ${host}`,
     text:
-      `Your merchant account has been disabled. \n\n` +
+      `Your ${name} merchant account has been disabled. \n\n` +
       `Please contact admin to request access again.`
   };
 

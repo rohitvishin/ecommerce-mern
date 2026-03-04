@@ -144,7 +144,7 @@ router.post('/register', async (req, res) => {
     await googlemail.sendEmail(
       registeredUser.email,
       'signup',
-      null,
+      req.headers.host,
       registeredUser
     );
 
