@@ -20,7 +20,7 @@ const Website = () => {
     return (
         <div className="homepage pb-5" style={{ background: "#f8f9fc" }}>
 
-            <Container fluid className="pt-5 px-lg-5">
+            <Container fluid className="pt-5 px-lg-5" style={{ background: "#f8f9fc", fontSize: "16px" }}>
 
                 {/* HERO */}
                 <Row className="justify-content-center mb-5">
@@ -33,7 +33,7 @@ const Website = () => {
                             }}
                         >
                             <h1 className="fw-bold mb-3" style={{ fontSize: "2.5rem" }}>
-                                Turn Your Instagram Into a Premium Online Store
+                                Stop Managing Orders in DMs. Start Selling Like a Brand.
                             </h1>
 
                             <p className="text-muted mb-4 fs-5">
@@ -59,7 +59,7 @@ const Website = () => {
                                         size="lg"
                                         className="rounded-pill px-5"
                                     >
-                                        Book Demo
+                                        View Demo
                                     </Button>
                                 </Link>
                             </div>

@@ -40,6 +40,7 @@ exports.merchantWelcome = name => {
     subject: 'Merchant Registration',
     text:
       `Hi ${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
+      `Your store link https://zoekart/${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
       `It looks like you already have a member account with us. Please sign in with your member credentials and you will be able to see your merchant account.`
   };
 

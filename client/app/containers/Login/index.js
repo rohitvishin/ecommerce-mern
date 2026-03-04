@@ -127,7 +127,7 @@ const mapStateToProps = state => {
     loginFormData: state.login.loginFormData,
     formErrors: state.login.formErrors,
     isLoading: state.login.isLoading,
-    isSubmitting: state.login.isSubmitting
+    isSubmitting: state.login.isSubmitting,
   };
 };
 

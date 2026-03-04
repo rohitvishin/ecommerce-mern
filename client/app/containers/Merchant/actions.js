@@ -7,6 +7,7 @@
 import { push, goBack } from 'connected-react-router';
 import { success } from 'react-notification-system-redux';
 import axios from 'axios';
+import { setShopInfo } from '../Shop/actions';
 
 import {
   FETCH_MERCHANTS,
@@ -348,12 +349,15 @@ export const findMerchant = (brandName) => {
           brandName
         }
       });
-      if (response.status !== 200 || !response.data.valid) {
+      if (response.status !== 200) {
         alert('Invalid store. Redirecting to home.');
         dispatch(push('/'));
+      } else {
+        const { brandName, phoneNumber } = response.data.merchant;
+        dispatch(setShopInfo(brandName, phoneNumber));
       }
     } catch (error) {
-      alert('Invalid store. Redirecting to home.');
+      alert('An error occurred. Redirecting to home.');
       dispatch(push('/'));
       handleError(error, dispatch);
     }

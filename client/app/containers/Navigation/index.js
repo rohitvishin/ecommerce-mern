@@ -124,9 +124,13 @@ class Navigation extends React.PureComponent {
       suggestions,
       onSearch,
       onSuggestionsFetchRequested,
-      onSuggestionsClearRequested
+      onSuggestionsClearRequested,
+      shopName,
+      shopNumber
     } = this.props;
-    const merchant = localStorage.getItem('store');
+    const pathName = history.location.pathname.split('/')[1];
+    const merchant = shopName ? shopName : 'zoekart';
+    const phoneNumber = shopNumber ? shopNumber : '8108889047';
     const inputProps = {
       placeholder: 'Search Products',
       value: searchValue,
@@ -134,7 +138,7 @@ class Navigation extends React.PureComponent {
         onSearch(newValue);
       }
     };
-
+    console.log(shopName);
     return (
       <header className='header fixed-mobile-header'>
         <div className='header-info'>
@@ -150,11 +154,11 @@ class Navigation extends React.PureComponent {
               </Col>
               <Col md='4' className='text-center d-none d-md-block'>
                 <i className='fa fa-phone' />
-                <span>Call us 951-999-9999</span>
+                <span>Call us {phoneNumber}</span>
               </Col>
               <Col xs='12' className='text-center d-block d-md-none'>
                 <i className='fa fa-phone' />
-                <span> Need Support? Call us 951-999-9999</span>
+                <span> Need Support? Call us {phoneNumber}</span>
               </Col>
             </Row>
           </Container>
@@ -171,7 +175,7 @@ class Navigation extends React.PureComponent {
               <div className='brand'>
 
                 {
-                  user.role === ROLES.Merchant ? (
+                  user.role === ROLES.Merchant || pathName === 'signup' ? (
                     <h1 className='logo'>{merchant}</h1>
                   ) :
                     <Link to={`/${merchant}/`}>
@@ -270,7 +274,7 @@ class Navigation extends React.PureComponent {
                       </DropdownMenu>
                     </UncontrolledDropdown>
                   ) : (
-                    merchant !== 'null' && merchant !== null ?
+                    merchant !== null && merchant !== undefined && pathName !== 'signup' ?
                       (
                         <UncontrolledDropdown nav inNavbar>
                           <DropdownToggle nav>
@@ -341,7 +345,9 @@ const mapStateToProps = state => {
     authenticated: state.authentication.authenticated,
     user: state.account.user,
     searchValue: state.navigation.searchValue,
-    suggestions: state.navigation.searchSuggestions
+    suggestions: state.navigation.searchSuggestions,
+    shopName: state.shop.shopName,
+    shopNumber: state.shop.shopNumber
   };
 };
 

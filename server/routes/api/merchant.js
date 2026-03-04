@@ -99,7 +99,6 @@ router.get('/find', async (req, res) => {
   try {
     const { brandName } = req.query;
     const merchant = await Merchant.findOne({ brandName: brandName, isActive: true });
-
     if (!merchant) {
       return res.status(404).json({
         error: 'Merchant not found.'
@@ -225,6 +224,7 @@ router.put('/reject/:id', auth, async (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     const { email, firstName, lastName, password, storeName, business, phone } = req.body;
+    const shopName = storeName.toLowerCase();
     if (!email) {
       return res
         .status(400)
@@ -238,10 +238,10 @@ router.post('/signup', async (req, res) => {
     if (!password) {
       return res.status(400).json({ error: 'You must enter a password.' });
     }
-    if (!/^[a-zA-Z0-9]+$/.test(storeName)) {
+    if (!/^[a-zA-Z0-9]+$/.test(shopName)) {
       return res.status(400).json({ error: 'Store name can only contain letters and numbers.' });
     }
-    const store = await Merchant.findOne({ brandName: storeName });
+    const store = await Merchant.findOne({ brandName: shopName });
     if (store) {
       return res
         .status(400)
@@ -259,7 +259,7 @@ router.post('/signup', async (req, res) => {
       password,
       firstName,
       lastName,
-      storeId: storeName
+      storeId: shopName
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -273,7 +273,7 @@ router.post('/signup', async (req, res) => {
       email,
       business: business,
       phoneNumber: phone,
-      brandName: storeName,
+      brandName: shopName,
       status: MERCHANT_STATUS.Approved,
       isActive: true
     });
@@ -293,7 +293,7 @@ router.post('/signup', async (req, res) => {
       new: true
     });
     //send mail to merchant about successful signup
-    await googlemail.sendEmail(email, 'merchant-application');
+    await googlemail.sendEmail(email, 'merchant-welcome', null, { name: shopName });
 
     res.status(200).json({
       success: true

@@ -24,7 +24,8 @@ class MerchantSignup extends React.PureComponent {
       signupFormData,
       formErrors,
       merchantSignupChange,
-      merchantRegister
+      merchantRegister,
+      history
     } = this.props;
 
     const handleSubmit = event => {
@@ -143,10 +144,19 @@ class MerchantSignup extends React.PureComponent {
               </Row>
               <Col xs='12' md='12'>
                 <Button
-                  className='mt-3'
+                  className='mt-3 mr-3'
                   type='submit'
                   variant='primary'
                   text='Get Started'
+                />
+                <Button
+                  className='mt-3'
+                  type='button'
+                  variant='secondary'
+                  onClick={() => {
+                    history.goBack();
+                  }}
+                  text='Go Back'
                 />
               </Col>
             </Col>
@@ -160,7 +170,9 @@ class MerchantSignup extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     signupFormData: state.merchant.signupFormData,
-    formErrors: state.merchant.signupFormErrors
+    formErrors: state.merchant.signupFormErrors,
+    shopName: state.shop.shopName,
+    shopNumber: state.shop.shopNumber
   };
 };
 

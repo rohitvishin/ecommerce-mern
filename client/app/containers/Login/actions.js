@@ -103,6 +103,6 @@ export const signOut = () => {
     localStorage.removeItem('store');
 
     dispatch(success(successfulOptions));
-    // dispatch(clearCart());
+    dispatch(clearCart());
   };
 };
