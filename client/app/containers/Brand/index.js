@@ -18,7 +18,7 @@ import Page404 from '../../components/Common/Page404';
 
 class Brand extends React.PureComponent {
   render() {
-    const { user } = this.props;
+    const { user, shopName } = this.props;
 
     return (
       <div className='brand-dashboard'>
@@ -37,7 +37,8 @@ class Brand extends React.PureComponent {
 
 const mapStateToProps = state => {
   return {
-    user: state.account.user
+    user: state.account.user,
+    shopName: state.account.shopName
   };
 };
 

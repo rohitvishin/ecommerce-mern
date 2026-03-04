@@ -13,7 +13,7 @@ import SubPage from '../../components/Manager/SubPage';
 import ResetPasswordForm from '../../components/Common/ResetPasswordForm';
 
 class AccountSecurity extends React.PureComponent {
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     const {

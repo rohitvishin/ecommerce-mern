@@ -4,6 +4,7 @@ const multer = require('multer');
 const Mongoose = require('mongoose');
 
 // Bring in Models & Utils
+const Merchant = require('../../models/merchant');
 const Product = require('../../models/product');
 const Brand = require('../../models/brand');
 const Category = require('../../models/category');
@@ -17,7 +18,7 @@ const {
 } = require('../../utils/queries');
 const { ROLES } = require('../../constants');
 const brand = require('../../models/brand');
-
+const googlemail = require('../../services/googlemail');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -219,7 +220,6 @@ router.post(
       const quantity = req.body.quantity;
       const price = req.body.price;
       const taxable = req.body.taxable;
-      const isActive = req.body.isActive;
       const brand = req.body.brand;
       const store = req.body.store;
       const image = req.file;
@@ -257,7 +257,7 @@ router.post(
         quantity,
         price,
         taxable,
-        isActive,
+        isActive: req.user.role === ROLES.Admin ? true : false,
         brand,
         store,
         imageUrl,
@@ -422,6 +422,14 @@ router.put(
 
       await Product.findOneAndUpdate(query, update, {
         new: true
+      }).then(async (updatedProduct) => {
+        if (updatedProduct.isActive) {
+          console.log('updatedProduct', updatedProduct);
+          const merchant = await Merchant.findOne({ brand: updatedProduct.brand }).select('email');
+          console.log('merchant mail', merchant.email);
+          // send email to merchant if product is activated by admin
+          await googlemail.sendEmail(merchant.email, 'product-activated', req.headers.host, updatedProduct);
+        }
       });
 
       res.status(200).json({
