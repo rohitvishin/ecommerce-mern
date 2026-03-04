@@ -17,8 +17,12 @@ import Button from '../../components/Common/Button';
 import Checkbox from '../../components/Common/Checkbox';
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
 import SignupProvider from '../../components/Common/SignupProvider';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 class Signup extends React.PureComponent {
+  state = {
+    captchaError: false
+  };
   componentDidMount() {
     const { merchant } = this.props.match.params;
     this.props.findMerchant(merchant);
@@ -35,11 +39,17 @@ class Signup extends React.PureComponent {
       signUp,
       subscribeChange
     } = this.props;
+    const { captchaError } = this.state;
     const merchant = this.props.match.params.merchant;
     if (authenticated) return <Redirect to='/dashboard' />;
     const handleSubmit = event => {
       signupFormData.merchant = this.props.match.params.merchant;
       event.preventDefault();
+      const captchaToken = signupFormData && signupFormData.captchaToken;
+      if (!captchaToken) {
+        this.setState({ captchaError: true });
+        return;
+      }
       signUp();
     };
 
@@ -106,6 +116,23 @@ class Signup extends React.PureComponent {
                     signupChange(name, value);
                   }}
                 />
+                <div className='mt-3 text-center'>
+                  <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                    onChange={value => {
+                      signupChange('captchaToken', value);
+                      this.setState({ captchaError: false });
+                    }}
+                    onExpired={() => {
+                      signupChange('captchaToken', '');
+                    }}
+                  />
+                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
+                    <div className='text-danger small mt-2'>
+                      {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                    </div>
+                  )}
+                </div>
               </Col>
             </Col>
             <Col

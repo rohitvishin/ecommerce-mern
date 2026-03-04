@@ -38,7 +38,8 @@
     "sass": "^1.32.12",
     "simple-line-icons": "^2.4.1",
     "socket.io-client": "^4.2.0",
-    "validatorjs": "^3.18.1"
+    "validatorjs": "^3.18.1",
+    "react-google-recaptcha": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

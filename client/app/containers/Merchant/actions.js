@@ -271,7 +271,8 @@ export const merchantRegister = () => {
         lastName: 'required',
         business: 'required',
         phone: 'required',
-        storeName: 'required'
+        storeName: 'required',
+        captchaToken: 'required'
       };
 
       const merchant = getState().merchant.signupFormData;
@@ -283,7 +284,8 @@ export const merchantRegister = () => {
         'required.lastName': 'Last Name is required.',
         'required.business': 'Business description is required.',
         'required.phone': 'Phone number is required.',
-        'required.storeName': 'Store Name is required.'
+        'required.storeName': 'Store Name is required.',
+        'required.captchaToken': 'Please complete the captcha.'
       });
 
       if (!isValid) {

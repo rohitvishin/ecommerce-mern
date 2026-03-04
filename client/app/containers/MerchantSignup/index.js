@@ -12,8 +12,12 @@ import { Row, Col } from 'reactstrap';
 import actions from '../../actions';
 import Input from '../../components/Common/Input';
 import Button from '../../components/Common/Button';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 class MerchantSignup extends React.PureComponent {
+  state = {
+    captchaError: false
+  };
   componentDidMount() {
     const email = this.props.location.search.split('=')[1];
     this.props.merchantSignupChange('email', email);
@@ -27,9 +31,15 @@ class MerchantSignup extends React.PureComponent {
       merchantRegister,
       history
     } = this.props;
+    const { captchaError } = this.state;
 
     const handleSubmit = event => {
       event.preventDefault();
+      const captchaToken = signupFormData && signupFormData.captchaToken;
+      if (!captchaToken) {
+        this.setState({ captchaError: true });
+        return;
+      }
       merchantRegister();
     };
 
@@ -140,6 +150,25 @@ class MerchantSignup extends React.PureComponent {
                       merchantSignupChange(name, value);
                     }}
                   />
+                </Col>
+              </Row>
+              <Row className='mt-3'>
+                <Col xs='12' md={{ size: 6, offset: 3 }} className='text-center'>
+                  <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                    onChange={value => {
+                      merchantSignupChange('captchaToken', value);
+                      this.setState({ captchaError: false });
+                    }}
+                    onExpired={() => {
+                      merchantSignupChange('captchaToken', '');
+                    }}
+                  />
+                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
+                    <div className='text-danger small mt-2'>
+                      {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                    </div>
+                  )}
                 </Col>
               </Row>
               <Col xs='12' md='12'>

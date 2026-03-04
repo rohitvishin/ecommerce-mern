@@ -51,11 +51,15 @@ export const signUp = () => {
       const newUser = getState().signup.signupFormData;
       const isSubscribed = getState().signup.isSubscribed;
 
+      // require captcha token
+      rules.captchaToken = 'required';
+
       const { isValid, errors } = allFieldsValidation(newUser, rules, {
         'required.email': 'Email is required.',
         'required.password': 'Password is required.',
         'required.firstName': 'First Name is required.',
-        'required.lastName': 'Last Name is required.'
+        'required.lastName': 'Last Name is required.',
+        'required.captchaToken': 'Please complete the captcha.'
       });
 
       if (!isValid) {
