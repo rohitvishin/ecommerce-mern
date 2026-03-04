@@ -24,7 +24,7 @@ export const forgotPasswordChange = (name, value) => {
   };
 };
 
-export const forgotPassowrd = () => {
+export const forgotPassword = () => {
   return async (dispatch, getState) => {
     try {
       const rules = {
@@ -33,8 +33,12 @@ export const forgotPassowrd = () => {
 
       const user = getState().forgotPassword.forgotFormData;
 
+      // require captcha token
+      rules.captchaToken = 'required';
+
       const { isValid, errors } = allFieldsValidation(user, rules, {
-        'required.email': 'Email is required.'
+        'required.email': 'Email is required.',
+        'required.captchaToken': 'Please complete the captcha.'
       });
 
       if (!isValid) {
