@@ -159,21 +159,27 @@ class MerchantSignup extends React.PureComponent {
               </Row>
               <Row className='mt-3'>
                 <Col xs='12' md={{ size: 6, offset: 3 }} className='text-center'>
-                  <ReCAPTCHA
-                    sitekey={siteKey}
-                    onChange={value => {
-                      merchantSignupChange('captchaToken', value);
-                      this.setState({ captchaError: false, siteKeyMissing: false });
-                    }}
-                    onExpired={() => {
-                      merchantSignupChange('captchaToken', '');
-                    }}
-                  />
-                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha') || this.state.siteKeyMissing) && (
+                  {siteKey ? (
+                    <>
+                      <ReCAPTCHA
+                        sitekey={siteKey}
+                        onChange={value => {
+                          merchantSignupChange('captchaToken', value);
+                          this.setState({ captchaError: false, siteKeyMissing: false });
+                        }}
+                        onExpired={() => {
+                          merchantSignupChange('captchaToken', '');
+                        }}
+                      />
+                      {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
+                        <div className='text-danger small mt-2'>
+                          {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                        </div>
+                      )}
+                    </>
+                  ) : (
                     <div className='text-danger small mt-2'>
-                      {this.state.siteKeyMissing
-                        ? 'ReCAPTCHA site key is not configured. Contact the administrator.'
-                        : formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                      ReCAPTCHA site key is not configured. Contact the administrator.
                     </div>
                   )}
                 </Col>
