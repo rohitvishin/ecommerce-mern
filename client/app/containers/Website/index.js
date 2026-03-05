@@ -143,34 +143,82 @@ const Website = () => {
                     </Col>
 
                     {[
-                        { title: "Starter", price: "₹0" },
-                        { title: "Growth", price: "₹699/month", highlight: true },
-                        { title: "Pro", price: "₹1499/month" }
+                        {
+                            title: "Starter",
+                            price: "Free ₹45",
+                            features: [
+                                "Up to 5 products",
+                                "Free SSL",
+                                "Free hosting",
+                                "Free store link",
+                                "Integrated payment gateway",
+                                "Unlimited orders",
+                                "Platform fee 4%",
+                                "Support"
+                            ]
+                        },
+                        {
+                            title: "Champion",
+                            price: "₹199 (₹299)",
+                            highlight: true,
+                            features: [
+                                "Up to 200 products",
+                                "Free SSL",
+                                "Free hosting",
+                                "Free store link",
+                                "Integrated payment gateway",
+                                "Unlimited orders",
+                                "Platform fee 2.5%",
+                                "Support"
+                            ]
+                        },
+                        {
+                            title: "Legend",
+                            price: "Coming Soon",
+                            features: [
+                                "Custom domain",
+                                "Up to 500 products",
+                                "Free SSL",
+                                "Free hosting",
+                                "Free store link",
+                                "Integrated payment gateway",
+                                "Unlimited orders",
+                                "Platform fee 2%",
+                                "Support"
+                            ]
+                        }
                     ].map((plan, index) => (
                         <Col xs="12" md="4" key={index} className="mb-4">
                             <div
-                                className="rounded-4 p-5 text-center h-100"
+                                className="rounded-4 p-5 text-center h-100 d-flex flex-column"
                                 style={{
                                     background: plan.highlight
                                         ? "linear-gradient(135deg, #5f6af5, #7b84ff)"
                                         : "#ffffff",
                                     color: plan.highlight ? "#ffffff" : "#000000",
-                                    border: plan.highlight
-                                        ? "none"
-                                        : "1px solid #eceef5"
+                                    border: plan.highlight ? "none" : "1px solid #eceef5"
                                 }}
                             >
                                 <h6 className="fw-semibold">{plan.title}</h6>
+
                                 <h3 className="my-3 fw-bold">{plan.price}</h3>
-                                <p className={plan.highlight ? "opacity-75" : "text-muted"}>
-                                    Powerful tools to scale your business.
-                                </p>
+
+                                <ul
+                                    className={`list-unstyled text-start mt-3 flex-grow-1 ${plan.highlight ? "opacity-75" : "text-muted"
+                                        }`}
+                                >
+                                    {plan.features.map((feature, i) => (
+                                        <li key={i} className="mb-2">
+                                            • {feature}
+                                        </li>
+                                    ))}
+                                </ul>
 
                                 <Button
                                     color={plan.highlight ? "light" : "primary"}
                                     className="rounded-pill px-4 mt-3"
                                 >
-                                    Choose Plan
+                                    {plan.title === "Legend" ? "Coming Soon" : "Choose Plan"}
                                 </Button>
                             </div>
                         </Col>

@@ -37,7 +37,7 @@ class MerchantSignup extends React.PureComponent {
       <div className='merchant-signup-form'>
         <form onSubmit={handleSubmit} noValidate>
           <Row>
-            <Col xs={{ size: 12 }} md={{ size: 6, offset: 3 }} className='p-0'>
+            <Col xs='12' md='6' className='p-0'>
               <Col xs='12' md='12'>
                 <h2 className='text-center'>Merchant Sign Up</h2>
                 <hr />
@@ -164,6 +164,14 @@ class MerchantSignup extends React.PureComponent {
                   text='Go Back'
                 />
               </Col>
+            </Col>
+            <Col
+              xs='12' md='5'>
+              <img
+                className='agreement-banner'
+                src={'/images/banners/agreement.svg'}
+                alt='agreement banner'
+              />
             </Col>
           </Row>
         </form>
