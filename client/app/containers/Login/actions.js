@@ -42,14 +42,11 @@ export const login = () => {
 
     const user = getState().login.loginFormData;
 
-    // require captcha token
-    rules.captchaToken = 'required';
-
     const { isValid, errors } = allFieldsValidation(user, rules, {
       'required.email': 'Email is required.',
       'email.email': 'Email format is invalid.',
       'required.password': 'Password is required.',
-      'min.password': 'Password must be at least 6 characters.', 'required.captchaToken': 'Please complete the captcha.'
+      'min.password': 'Password must be at least 6 characters.'
     });
 
     if (!isValid) {

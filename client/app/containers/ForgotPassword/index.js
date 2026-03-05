@@ -14,13 +14,9 @@ import actions from '../../actions';
 
 import Input from '../../components/Common/Input';
 import Button from '../../components/Common/Button';
-import ReCAPTCHA from 'react-google-recaptcha';
 
 class ForgotPassword extends React.PureComponent {
-  state = {
-    captchaError: false,
-    siteKeyMissing: false
-  };
+  state = {};
   render() {
     const {
       authenticated,
@@ -31,18 +27,8 @@ class ForgotPassword extends React.PureComponent {
     } = this.props;
     const { merchant } = this.props.match.params;
     if (authenticated) return <Redirect to='/dashboard' />;
-    const siteKey = process.env.RECAPTCHA_SITE;
     const handleSubmit = event => {
       event.preventDefault();
-      if (!siteKey) {
-        this.setState({ siteKeyMissing: true });
-        return;
-      }
-      const captchaToken = forgotFormData && forgotFormData.captchaToken;
-      if (!captchaToken) {
-        this.setState({ captchaError: true });
-        return;
-      }
       forgotPassword();
     };
 
@@ -64,31 +50,7 @@ class ForgotPassword extends React.PureComponent {
                   forgotPasswordChange(name, value);
                 }}
               />
-              <div className='mt-3 text-center'>
-                {siteKey ? (
-                  <>
-                    <ReCAPTCHA
-                      sitekey={siteKey}
-                      onChange={value => {
-                        forgotPasswordChange('captchaToken', value);
-                        this.setState({ captchaError: false, siteKeyMissing: false });
-                      }}
-                      onExpired={() => {
-                        forgotPasswordChange('captchaToken', '');
-                      }}
-                    />
-                    {(formErrors['captcha'] || (this.state.captchaError && 'Please complete the captcha')) && (
-                      <div className='text-danger small mt-2'>
-                        {formErrors['captcha'] || (this.state.captchaError && 'Please complete the captcha')}
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className='text-danger small mt-2'>
-                    ReCAPTCHA site key is not configured. Contact the administrator.
-                  </div>
-                )}
-              </div>
+              {/* removed reCAPTCHA */}
             </Col>
           </Row>
           <hr />
