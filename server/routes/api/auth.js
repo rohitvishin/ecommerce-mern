@@ -9,6 +9,7 @@ const auth = require('../../middleware/auth');
 
 // Bring in Models & Helpers
 const User = require('../../models/user');
+const Merchant = require('../../models/merchant');
 const mailchimp = require('../../services/mailchimp');
 // const mailgun = require('../../services/mailgun');
 const googlemail = require('../../services/googlemail');
@@ -19,8 +20,26 @@ const { secret, tokenLife } = keys.jwt;
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-
+    const { email, password, store, captchaToken } = req.body;
+    // verify captcha token with Google
+    try {
+      if (!captchaToken) {
+        return res.status(400).json({ error: 'Captcha token is missing.' });
+      }
+      const secret = process.env.RECAPTCHA_SECRET;
+      if (!secret) {
+        console.error('RECAPTCHA_SECRET not set on server');
+        return res.status(500).json({ error: 'Server captcha configuration error.' });
+      }
+      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(captchaToken)}`;
+      const verifyRes = await require('axios').post(verifyUrl);
+      if (!verifyRes || !verifyRes.data || verifyRes.data.success !== true) {
+        return res.status(400).json({ error: 'Failed captcha verification.' });
+      }
+    } catch (captchaErr) {
+      console.error('Captcha verification error', captchaErr);
+      return res.status(400).json({ error: 'Failed captcha verification.' });
+    }
     if (!email) {
       return res
         .status(400)
@@ -30,12 +49,12 @@ router.post('/login', async (req, res) => {
     if (!password) {
       return res.status(400).json({ error: 'You must enter a password.' });
     }
-
     const user = await User.findOne({ email });
-    if (!user) {
+    const vendor = await Merchant.findOne({ brandName: store });
+    if (!user || !vendor) {
       return res
         .status(400)
-        .send({ error: 'No user found for this email address.' });
+        .send({ error: 'Invalid user or store url.' });
     }
 
     if (user && user.provider !== EMAIL_PROVIDER.Email) {
@@ -83,8 +102,33 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, firstName, lastName, password, isSubscribed } = req.body;
-
+    const { email, firstName, lastName, password, isSubscribed, merchant, captchaToken } = req.body;
+    // verify captcha token with Google
+    try {
+      if (!captchaToken) {
+        return res.status(400).json({ error: 'Captcha token is missing.' });
+      }
+      const secret = process.env.RECAPTCHA_SECRET;
+      if (!secret) {
+        console.error('RECAPTCHA_SECRET not set on server');
+        return res.status(500).json({ error: 'Server captcha configuration error.' });
+      }
+      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(captchaToken)}`;
+      const verifyRes = await require('axios').post(verifyUrl);
+      if (!verifyRes || !verifyRes.data || verifyRes.data.success !== true) {
+        return res.status(400).json({ error: 'Failed captcha verification.' });
+      }
+    } catch (captchaErr) {
+      console.error('Captcha verification error', captchaErr);
+      return res.status(400).json({ error: 'Failed captcha verification.' });
+    }
+    const store = await Merchant.findOne({ brandName: merchant });
+    if (!store) {
+      return res
+        .status(400)
+        .json({ error: 'Store not found.' });
+    }
+    const storeId = store.brandName;
     if (!email) {
       return res
         .status(400)
@@ -120,7 +164,8 @@ router.post('/register', async (req, res) => {
       email,
       password,
       firstName,
-      lastName
+      lastName,
+      storeId
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -136,7 +181,7 @@ router.post('/register', async (req, res) => {
     await googlemail.sendEmail(
       registeredUser.email,
       'signup',
-      null,
+      req.headers.host,
       registeredUser
     );
 
@@ -163,7 +208,26 @@ router.post('/register', async (req, res) => {
 
 router.post('/forgot', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, captchaToken } = req.body;
+    // verify captcha token with Google
+    try {
+      if (!captchaToken) {
+        return res.status(400).json({ error: 'Captcha token is missing.' });
+      }
+      const secret = process.env.RECAPTCHA_SECRET;
+      if (!secret) {
+        console.error('RECAPTCHA_SECRET not set on server');
+        return res.status(500).json({ error: 'Server captcha configuration error.' });
+      }
+      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(captchaToken)}`;
+      const verifyRes = await require('axios').post(verifyUrl);
+      if (!verifyRes || !verifyRes.data || verifyRes.data.success !== true) {
+        return res.status(400).json({ error: 'Failed captcha verification.' });
+      }
+    } catch (captchaErr) {
+      console.error('Captcha verification error', captchaErr);
+      return res.status(400).json({ error: 'Failed captcha verification.' });
+    }
 
     if (!email) {
       return res

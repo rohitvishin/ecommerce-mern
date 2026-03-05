@@ -22,7 +22,7 @@ const EditBrand = props => {
     formErrors,
     updateBrand,
     deleteBrand,
-    activateBrand
+    activateBrand,
   } = props;
 
   const handleSubmit = event => {
@@ -32,12 +32,6 @@ const EditBrand = props => {
 
   return (
     <div className='edit-brand'>
-      <div className='d-flex flex-row mx-0 mb-3'>
-        <label className='mr-1'>Brand link </label>
-        <Link to={`/shop/brand/${brand.slug}`} className='default-link'>
-          {brand.slug}
-        </Link>
-      </div>
       <form onSubmit={handleSubmit} noValidate>
         <Row>
           <Col xs='12'>

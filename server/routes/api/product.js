@@ -4,6 +4,7 @@ const multer = require('multer');
 const Mongoose = require('mongoose');
 
 // Bring in Models & Utils
+const Merchant = require('../../models/merchant');
 const Product = require('../../models/product');
 const Brand = require('../../models/brand');
 const Category = require('../../models/category');
@@ -16,7 +17,8 @@ const {
   getStoreProductsWishListQuery
 } = require('../../utils/queries');
 const { ROLES } = require('../../constants');
-
+const brand = require('../../models/brand');
+const googlemail = require('../../services/googlemail');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -32,7 +34,6 @@ router.get(
           path: 'brand',
           select: 'name isActive slug'
         });
-
       res.status(200).json({
         products
       });
@@ -110,6 +111,7 @@ router.get('/list', async (req, res) => {
       min,
       category,
       brand,
+      store,
       page = 1,
       limit = 10
     } = req.query;
@@ -145,6 +147,12 @@ router.get('/list', async (req, res) => {
         $match: {
           'brand._id': { $eq: brandDoc._id }
         }
+      });
+    }
+
+    if (store) {
+      basicQuery.unshift({
+        $match: { store }
       });
     }
 
@@ -206,14 +214,14 @@ router.post(
   upload.single('image'),
   async (req, res) => {
     try {
-      const sku = req.body.sku;
+      const sku = req.body.store + '_' + req.body.sku;
       const name = req.body.name;
       const description = req.body.description;
       const quantity = req.body.quantity;
       const price = req.body.price;
       const taxable = req.body.taxable;
-      const isActive = req.body.isActive;
       const brand = req.body.brand;
+      const store = req.body.store;
       const image = req.file;
 
       if (!sku) {
@@ -249,8 +257,9 @@ router.post(
         quantity,
         price,
         taxable,
-        isActive,
+        isActive: req.user.role === ROLES.Admin ? true : false,
         brand,
+        store,
         imageUrl,
         imageKey
       });
@@ -413,6 +422,14 @@ router.put(
 
       await Product.findOneAndUpdate(query, update, {
         new: true
+      }).then(async (updatedProduct) => {
+        if (updatedProduct.isActive) {
+          console.log('updatedProduct', updatedProduct);
+          const merchant = await Merchant.findOne({ brand: updatedProduct.brand }).select('email');
+          console.log('merchant mail', merchant.email);
+          // send email to merchant if product is activated by admin
+          await googlemail.sendEmail(merchant.email, 'product-activated', req.headers.host, updatedProduct);
+        }
       });
 
       res.status(200).json({

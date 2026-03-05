@@ -10,21 +10,20 @@ import { connect } from 'react-redux';
 
 import actions from '../../actions';
 
-import ProductList from '../../components/Store/ProductList';
+import ProductList from '../../components/Store/ProductList/';
 import NotFound from '../../components/Common/NotFound';
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
 
 class ProductsShop extends React.PureComponent {
   componentDidMount() {
+    localStorage.setItem('store', this.props.match.params.merchant)
     const slug = this.props.match.params.slug;
     this.props.filterProducts(slug);
   }
 
   render() {
     const { products, isLoading, authenticated, updateWishlist } = this.props;
-
     const displayProducts = products && products.length > 0;
-
     return (
       <div className='products-shop'>
         {isLoading && <LoadingIndicator />}

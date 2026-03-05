@@ -63,7 +63,7 @@ export const resetPassword = token => {
       };
 
       if (response.data.success == true) {
-        dispatch(push('/login'));
+        dispatch(push('/'));
       }
 
       dispatch(success(successfulOptions));

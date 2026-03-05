@@ -7,6 +7,7 @@
 import { push, goBack } from 'connected-react-router';
 import { success } from 'react-notification-system-redux';
 import axios from 'axios';
+import { setShopInfo } from '../Shop/actions';
 
 import {
   FETCH_MERCHANTS,
@@ -251,7 +252,7 @@ export const merchantSignUp = token => {
 
       dispatch(signOut());
       dispatch(success(successfulOptions));
-      dispatch(push('/login'));
+      dispatch(goBack());
       dispatch({ type: SIGNUP_RESET });
     } catch (error) {
       const title = `Please try to signup again!`;
@@ -260,6 +261,55 @@ export const merchantSignUp = token => {
   };
 };
 
+export const merchantRegister = () => {
+  return async (dispatch, getState) => {
+    try {
+      const rules = {
+        email: 'required|email',
+        password: 'required|min:6',
+        firstName: 'required',
+        lastName: 'required',
+        business: 'required',
+        phone: 'required',
+        storeName: 'required',
+        captchaToken: 'required'
+      };
+
+      const merchant = getState().merchant.signupFormData;
+
+      const { isValid, errors } = allFieldsValidation(merchant, rules, {
+        'required.email': 'Email is required.',
+        'required.password': 'Password is required.',
+        'required.firstName': 'First Name is required.',
+        'required.lastName': 'Last Name is required.',
+        'required.business': 'Business description is required.',
+        'required.phone': 'Phone number is required.',
+        'required.storeName': 'Store Name is required.',
+        'required.captchaToken': 'Please complete the captcha.'
+      });
+
+      if (!isValid) {
+        return dispatch({ type: SET_SIGNUP_FORM_ERRORS, payload: errors });
+      }
+
+      await axios.post(`${API_URL}/merchant/signup/`, merchant);
+
+      const successfulOptions = {
+        title: `You have signed up successfully! Please sign in with the email and password. Thank you!`,
+        position: 'tr',
+        autoDismiss: 1
+      };
+
+      dispatch(signOut());
+      dispatch(success(successfulOptions));
+      dispatch(push(`/${merchant.storeName}/login`));
+      dispatch({ type: SIGNUP_RESET });
+    } catch (error) {
+      const title = `Please try to signup again!`;
+      handleError(error, dispatch, title);
+    }
+  };
+};
 // delete merchant api
 export const deleteMerchant = (merchant, search, page) => {
   return async (dispatch, getState) => {
@@ -288,6 +338,30 @@ export const deleteMerchant = (merchant, search, page) => {
         // });
       }
     } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+};
+
+export const findMerchant = (brandName) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log('Finding merchant with brand name:', brandName);
+      const response = await axios.get(`${API_URL}/merchant/find`, {
+        params: {
+          brandName
+        }
+      });
+      if (response.status !== 200) {
+        alert('Invalid store. Redirecting to home.');
+        dispatch(push('/'));
+      } else {
+        const { brandName, phoneNumber } = response.data.merchant;
+        dispatch(setShopInfo(brandName, phoneNumber));
+      }
+    } catch (error) {
+      alert('An error occurred. Redirecting to home.');
+      dispatch(push('/'));
       handleError(error, dispatch);
     }
   };

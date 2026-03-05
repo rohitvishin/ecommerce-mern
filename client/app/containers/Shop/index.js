@@ -25,12 +25,13 @@ import SelectOption from '../../components/Common/SelectOption';
 class Shop extends React.PureComponent {
   componentDidMount() {
     document.body.classList.add('shop-page');
+    const brandName = this.props.match.params.merchant;
+    this.props.findMerchant(brandName);
   }
 
   componentWillUnmount() {
     document.body.classList.remove('shop-page');
   }
-
   render() {
     const { products, advancedFilters, filterProducts } = this.props;
     const { totalPages, currentPage, count, limit, order } = advancedFilters;
@@ -95,7 +96,8 @@ class Shop extends React.PureComponent {
               </Col>
             </Row>
             <Switch>
-              <Route exact path='/shop' component={ProductsShop} />
+              <Route exact path='/:merchant' component={ProductsShop} />
+              <Route exact path='/:merchant/shop' component={ProductsShop} />
               <Route path='/shop/category/:slug' component={CategoryShop} />
               <Route path='/shop/brand/:slug' component={BrandsShop} />
               <Route path='*' component={Page404} />

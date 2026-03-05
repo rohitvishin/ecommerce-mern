@@ -16,7 +16,7 @@ import actions from '../../actions';
 import Login from '../Login';
 import Signup from '../Signup';
 import MerchantSignup from '../MerchantSignup';
-import HomePage from '../Homepage';
+import Website from '../Website';
 import Dashboard from '../Dashboard';
 import Support from '../Support';
 import Navigation from '../Navigation';
@@ -36,6 +36,7 @@ import AuthSuccess from '../AuthSuccess';
 import Footer from '../../components/Common/Footer';
 import Page404 from '../../components/Common/Page404';
 import { CART_ITEMS } from '../../constants';
+import Checkout from '../Checkout';
 
 class Application extends React.PureComponent {
   constructor(props) {
@@ -75,44 +76,62 @@ class Application extends React.PureComponent {
   render() {
     return (
       <div className='application'>
-        <Notification />
-        <Navigation />
-        <main className='main'>
-          <Container>
-            <div className='wrapper'>
-              <Switch>
-                <Route exact path='/' component={HomePage} />
-                <Route path='/shop' component={Shop} />
-                <Route path='/sell' component={Sell} />
-                <Route path='/contact' component={Contact} />
-                <Route path='/brands' component={BrandsPage} />
-                <Route path='/product/:slug' component={ProductPage} />
-                <Route path='/order/success/:id' component={OrderSuccess} />
-                <Route path='/order/:id' component={OrderPage} />
-                <Route path='/login' component={Login} />
-                <Route path='/register' component={Signup} />
-                <Route
-                  path='/merchant-signup/:token'
-                  component={MerchantSignup}
-                />
-                <Route path='/forgot-password' component={ForgotPassword} />
-                <Route
-                  path='/reset-password/:token'
-                  component={ResetPassword}
-                />
-                <Route path='/auth/success' component={AuthSuccess} />
-                <Route path='/support' component={Authentication(Support)} />
-                <Route
-                  path='/dashboard'
-                  component={Authentication(Dashboard)}
-                />
-                <Route path='/404' component={Page404} />
-                <Route path='*' component={Page404} />
-              </Switch>
-            </div>
-          </Container>
-        </main>
-        <Footer />
+        <Route exact path="/" component={Website} />
+        <Route path="/:merchant">
+          <Notification />
+          <Navigation />
+          <main className='main'>
+            <Container>
+              <div className='wrapper'>
+                <Switch>
+                  {/* merchant / admin route start */}
+                  <Route path='/shop' component={Shop} />
+                  <Route path='/sell' component={Sell} />
+                  <Route path='/contact' component={Contact} />
+                  <Route path='/brands' component={BrandsPage} />
+                  <Route path='/checkout' component={Checkout} />
+                  <Route path='/product/:slug' component={ProductPage} />
+                  <Route path='/order/success/:id' component={OrderSuccess} />
+                  <Route path='/order/:id' component={OrderPage} />
+                  <Route path='/admin/login' component={Login} />
+                  <Route path='/admin/register' component={Signup} />
+                  <Route
+                    exact
+                    path='/signup'
+                    component={MerchantSignup}
+                  />
+                  <Route
+                    path='/merchant-signup/:token'
+                    component={MerchantSignup}
+                  />
+                  <Route path='/:merchant/forgot-password' component={ForgotPassword} />
+                  <Route
+                    path='/reset-password/:token'
+                    component={ResetPassword}
+                  />
+                  <Route path='/auth/success' component={AuthSuccess} />
+                  <Route path='/support' component={Authentication(Support)} />
+                  <Route
+                    path='/dashboard'
+                    component={Authentication(Dashboard)}
+                  />
+                  {/* merchant / admin route start */}
+
+
+                  {/* user login route start */}
+                  <Route path='/:merchant/login' component={Login} />
+                  <Route path='/:merchant/register' component={Signup} />
+                  <Route path='/:merchant' component={Shop} />
+                  {/* user route end */}
+
+                  <Route path='/404' component={Page404} />
+                  <Route path='*' component={Page404} />
+                </Switch>
+              </div>
+            </Container>
+          </main>
+          <Footer />
+        </Route>
       </div>
     );
   }

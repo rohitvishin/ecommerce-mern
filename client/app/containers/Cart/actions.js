@@ -129,6 +129,13 @@ export const handleCart = () => {
 
 export const handleCheckout = () => {
   return (dispatch, getState) => {
+    dispatch(toggleCart());
+    dispatch(push('/checkout'));
+  };
+}
+export const handleCheckoutLogin = () => {
+  const merchant = localStorage.getItem('store');
+  return (dispatch, getState) => {
     const successfulOptions = {
       title: `Please Login to proceed to checkout`,
       position: 'tr',
@@ -136,15 +143,16 @@ export const handleCheckout = () => {
     };
 
     dispatch(toggleCart());
-    dispatch(push('/login'));
+    dispatch(push(`${merchant}/login`));
     dispatch(success(successfulOptions));
   };
 };
 
 // Continue shopping use case
 export const handleShopping = () => {
+  const merchant = localStorage.getItem('store');
   return (dispatch, getState) => {
-    dispatch(push('/shop'));
+    dispatch(push(`${merchant}/`));
     dispatch(toggleCart());
   };
 };

@@ -46,7 +46,7 @@ const prepareTemplate = (type, host, data) => {
             break;
 
         case 'signup':
-            message = template.signupEmail(data);
+            message = template.signupEmail(host, data);
             break;
 
         case 'merchant-signup':
@@ -54,7 +54,11 @@ const prepareTemplate = (type, host, data) => {
             break;
 
         case 'merchant-welcome':
-            message = template.merchantWelcome(data);
+            message = template.merchantWelcome(host, data);
+            break;
+
+        case 'product-activated':
+            message = template.productActivatedEmail(host, data);
             break;
 
         case 'newsletter-subscription':
@@ -66,11 +70,11 @@ const prepareTemplate = (type, host, data) => {
             break;
 
         case 'merchant-application':
-            message = template.merchantApplicationEmail();
+            message = template.merchantApplicationEmail(host);
             break;
 
         case 'merchant-deactivate-account':
-            message = template.merchantDeactivateAccount();
+            message = template.merchantDeactivateAccount(host, data);
             break;
 
         case 'order-confirmation':

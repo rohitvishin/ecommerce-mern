@@ -34,6 +34,8 @@ import { BarsIcon } from '../../components/Common/Icon';
 import MiniBrand from '../../components/Store//MiniBrand';
 import Menu from '../NavigationMenu';
 import Cart from '../Cart';
+import { ROLES } from '../../constants';
+
 
 class Navigation extends React.PureComponent {
   componentDidMount() {
@@ -59,7 +61,6 @@ class Navigation extends React.PureComponent {
     const BoldName = (suggestion, query) => {
       const matches = AutosuggestHighlightMatch(suggestion.name, query);
       const parts = AutosuggestHighlightParse(suggestion.name, matches);
-
       return (
         <div>
           {parts.map((part, index) => {
@@ -123,9 +124,13 @@ class Navigation extends React.PureComponent {
       suggestions,
       onSearch,
       onSuggestionsFetchRequested,
-      onSuggestionsClearRequested
+      onSuggestionsClearRequested,
+      shopName,
+      shopNumber
     } = this.props;
-
+    const pathName = history.location.pathname.split('/')[1];
+    const merchant = shopName ? shopName : 'zoekart';
+    const phoneNumber = shopNumber ? shopNumber : '8108889047';
     const inputProps = {
       placeholder: 'Search Products',
       value: searchValue,
@@ -133,7 +138,7 @@ class Navigation extends React.PureComponent {
         onSearch(newValue);
       }
     };
-
+    console.log(shopName);
     return (
       <header className='header fixed-mobile-header'>
         <div className='header-info'>
@@ -149,11 +154,11 @@ class Navigation extends React.PureComponent {
               </Col>
               <Col md='4' className='text-center d-none d-md-block'>
                 <i className='fa fa-phone' />
-                <span>Call us 951-999-9999</span>
+                <span>Call us {phoneNumber}</span>
               </Col>
               <Col xs='12' className='text-center d-block d-md-none'>
                 <i className='fa fa-phone' />
-                <span> Need advice? Call us 951-999-9999</span>
+                <span> Need Support? Call us {phoneNumber}</span>
               </Col>
             </Row>
           </Container>
@@ -168,40 +173,52 @@ class Navigation extends React.PureComponent {
               className='pr-0'
             >
               <div className='brand'>
-                {categories && categories.length > 0 && (
-                  <Button
-                    borderless
-                    variant='empty'
-                    className='d-none d-md-block'
-                    ariaLabel='open the menu'
-                    icon={<BarsIcon />}
-                    onClick={() => this.toggleMenu()}
-                  />
-                )}
-                <Link to='/'>
-                  <h1 className='logo'>ZOSTORE</h1>
-                </Link>
+
+                {
+                  user.role === ROLES.Merchant || pathName === 'signup' ? (
+                    <h1 className='logo'>{merchant}</h1>
+                  ) :
+                    <Link to={`/${merchant}/`}>
+                      <h1 className='logo'>{merchant}</h1>
+                    </Link>
+                }
+
               </div>
             </Col>
-            <Col
-              xs={{ size: 12, order: 4 }}
-              sm={{ size: 12, order: 4 }}
-              md={{ size: 12, order: 4 }}
-              lg={{ size: 5, order: 2 }}
-              className='pt-2 pt-lg-0'
-            >
-              <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={this.getSuggestionValue}
-                renderSuggestion={this.renderSuggestion}
-                inputProps={inputProps}
-                onSuggestionSelected={(_, item) => {
-                  history.push(`/product/${item.suggestion.slug}`);
-                }}
-              />
-            </Col>
+            {
+              user.role === ROLES.Member ? (
+                <Col
+                  xs={{ size: 12, order: 4 }}
+                  sm={{ size: 12, order: 4 }}
+                  md={{ size: 12, order: 4 }}
+                  lg={{ size: 5, order: 2 }}
+                  className='pt-2 pt-lg-0'
+                >
+                  <Autosuggest
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    getSuggestionValue={this.getSuggestionValue}
+                    renderSuggestion={this.renderSuggestion}
+                    inputProps={inputProps}
+                    onSuggestionSelected={(_, item) => {
+                      history.push(`/product/${item.suggestion.slug}`);
+                    }}
+                  />
+                </Col>
+              )
+                : <Col
+                  xs={{ size: 12, order: 4 }}
+                  sm={{ size: 12, order: 4 }}
+                  md={{ size: 12, order: 4 }}
+                  lg={{ size: 5, order: 2 }}
+                  className='pt-2 pt-lg-0'
+                >
+                  <div>
+                    <h2>MANAGE STORE</h2>
+                  </div>
+                </Col>
+            }
             <Col
               xs={{ size: 12, order: 2 }}
               sm={{ size: 12, order: 2 }}
@@ -231,42 +248,16 @@ class Navigation extends React.PureComponent {
             // className='px-0'
             >
               <Navbar color='light' light expand='md' className='mt-1 mt-md-0'>
-                <CartIcon
-                  className='d-none d-md-block'
-                  cartItems={cartItems}
-                  onClick={toggleCart}
-                />
+                {user.role === ROLES.Member ? (
+                  <CartIcon
+                    className='d-none d-md-block'
+                    cartItems={cartItems}
+                    onClick={toggleCart}
+                  />
+                ) : ''}
+
                 <Nav navbar>
-                  {brands && brands.length > 0 && (
-                    <Dropdown
-                      nav
-                      inNavbar
-                      toggle={() => this.toggleBrand()}
-                      isOpen={isBrandOpen}
-                    >
-                      <DropdownToggle nav>
-                        Brands
-                        <span className='fa fa-chevron-down dropdown-caret'></span>
-                      </DropdownToggle>
-                      <DropdownMenu right className='nav-brand-dropdown'>
-                        <div className='mini-brand'>
-                          <MiniBrand
-                            brands={brands}
-                            toggleBrand={() => this.toggleBrand()}
-                          />
-                        </div>
-                      </DropdownMenu>
-                    </Dropdown>
-                  )}
-                  <NavItem>
-                    <NavLink
-                      tag={ActiveLink}
-                      to='/shop'
-                      activeClassName='active'
-                    >
-                      Shop
-                    </NavLink>
-                  </NavItem>
+
                   {authenticated ? (
                     <UncontrolledDropdown nav inNavbar>
                       <DropdownToggle nav>
@@ -275,28 +266,31 @@ class Navigation extends React.PureComponent {
                       </DropdownToggle>
                       <DropdownMenu right>
                         <DropdownItem
-                          onClick={() => history.push('/dashboard')}
+                          onClick={() => history.push(`/dashboard`)}
                         >
-                          Dashboard
+                          {user.role === ROLES.Member ? 'Account' : 'Dashboard'}
                         </DropdownItem>
                         <DropdownItem onClick={signOut}>Sign Out</DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
                   ) : (
-                    <UncontrolledDropdown nav inNavbar>
-                      <DropdownToggle nav>
-                        Welcome!
-                        <span className='fa fa-chevron-down dropdown-caret'></span>
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem onClick={() => history.push('/login')}>
-                          Login
-                        </DropdownItem>
-                        <DropdownItem onClick={() => history.push('/register')}>
-                          Sign Up
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledDropdown>
+                    merchant !== null && merchant !== undefined && pathName !== 'signup' ?
+                      (
+                        <UncontrolledDropdown nav inNavbar>
+                          <DropdownToggle nav>
+                            Welcome!
+                            <span className='fa fa-chevron-down dropdown-caret'></span>
+                          </DropdownToggle>
+                          <DropdownMenu right>
+                            <DropdownItem onClick={() => history.push(`/${merchant}/login`)}>
+                              Login
+                            </DropdownItem>
+                            <DropdownItem onClick={() => history.push(`/${merchant}/register`)}>
+                              Sign Up
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      ) : ''
                   )}
                 </Nav>
               </Navbar>
@@ -335,7 +329,7 @@ class Navigation extends React.PureComponent {
             onClick={toggleMenu}
           />
         </div>
-      </header>
+      </header >
     );
   }
 }
@@ -351,7 +345,9 @@ const mapStateToProps = state => {
     authenticated: state.authentication.authenticated,
     user: state.account.user,
     searchValue: state.navigation.searchValue,
-    suggestions: state.navigation.searchSuggestions
+    suggestions: state.navigation.searchSuggestions,
+    shopName: state.shop.shopName,
+    shopNumber: state.shop.shopNumber
   };
 };
 

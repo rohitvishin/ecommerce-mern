@@ -16,8 +16,19 @@ import Input from '../../components/Common/Input';
 import Button from '../../components/Common/Button';
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
 import SignupProvider from '../../components/Common/SignupProvider';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 class Login extends React.PureComponent {
+  state = {
+    captchaError: false
+  };
+  componentDidMount() {
+    const { merchant } = this.props.match.params;
+    console.log('Merchant from URL:', merchant);
+    setTimeout(() => {
+      this.props.findMerchant(merchant);
+    }, 200);
+  }
   render() {
     const {
       authenticated,
@@ -28,15 +39,22 @@ class Login extends React.PureComponent {
       isLoading,
       isSubmitting
     } = this.props;
+    const { captchaError } = this.state;
 
     if (authenticated) return <Redirect to='/dashboard' />;
-
+    const { merchant } = this.props.match.params;
+    loginFormData.store = merchant;
     const registerLink = () => {
-      this.props.history.push('/register');
+      this.props.history.push(`/${merchant}/register`);
     };
 
     const handleSubmit = event => {
       event.preventDefault();
+      const captchaToken = loginFormData && loginFormData.captchaToken;
+      if (!captchaToken) {
+        this.setState({ captchaError: true });
+        return;
+      }
       login();
     };
 
@@ -77,6 +95,23 @@ class Login extends React.PureComponent {
                     loginChange(name, value);
                   }}
                 />
+                <div className='mt-3 text-center'>
+                  <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                    onChange={value => {
+                      loginChange('captchaToken', value);
+                      this.setState({ captchaError: false });
+                    }}
+                    onExpired={() => {
+                      loginChange('captchaToken', '');
+                    }}
+                  />
+                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
+                    <div className='text-danger small mt-2'>
+                      {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                    </div>
+                  )}
+                </div>
               </Col>
             </Col>
             <Col
@@ -105,7 +140,7 @@ class Login extends React.PureComponent {
             </div>
             <Link
               className='redirect-link forgot-password-link'
-              to={'/forgot-password'}
+              to={`/${merchant}/forgot-password`}
             >
               Forgot Password?
             </Link>
@@ -122,7 +157,7 @@ const mapStateToProps = state => {
     loginFormData: state.login.loginFormData,
     formErrors: state.login.formErrors,
     isLoading: state.login.isLoading,
-    isSubmitting: state.login.isSubmitting
+    isSubmitting: state.login.isSubmitting,
   };
 };
 

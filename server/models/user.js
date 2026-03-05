@@ -34,6 +34,10 @@ const UserSchema = new Schema({
     required: true,
     default: EMAIL_PROVIDER.Email
   },
+  storeId: {
+    type: String,
+    default: null
+  },
   googleId: {
     type: String
   },

@@ -4,7 +4,7 @@
  *
  */
 
-import { push } from 'connected-react-router';
+import { goBack, push } from 'connected-react-router';
 import { success } from 'react-notification-system-redux';
 import axios from 'axios';
 
@@ -24,7 +24,7 @@ export const forgotPasswordChange = (name, value) => {
   };
 };
 
-export const forgotPassowrd = () => {
+export const forgotPassword = () => {
   return async (dispatch, getState) => {
     try {
       const rules = {
@@ -33,8 +33,12 @@ export const forgotPassowrd = () => {
 
       const user = getState().forgotPassword.forgotFormData;
 
+      // require captcha token
+      rules.captchaToken = 'required';
+
       const { isValid, errors } = allFieldsValidation(user, rules, {
-        'required.email': 'Email is required.'
+        'required.email': 'Email is required.',
+        'required.captchaToken': 'Please complete the captcha.'
       });
 
       if (!isValid) {
@@ -52,7 +56,7 @@ export const forgotPassowrd = () => {
       };
 
       if (response.data.success === true) {
-        dispatch(push('/login'));
+        dispatch(goBack());
       }
       dispatch(success(successfulOptions));
 

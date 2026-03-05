@@ -55,6 +55,93 @@ router.post('/add', auth, async (req, res) => {
   }
 });
 
+router.post('/checkout', auth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      country,
+      pincode,
+      paymentMethod,
+      total
+    } = req.body;
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !phone) {
+      return res
+        .status(400)
+        .json({ error: 'User information is required.' });
+    }
+
+    if (!address || !city || !state || !country || !pincode) {
+      return res
+        .status(400)
+        .json({ error: 'Shipping address is required.' });
+    }
+
+    if (!paymentMethod) {
+      return res
+        .status(400)
+        .json({ error: 'Payment method is required.' });
+    }
+
+    if (!total || total <= 0) {
+      return res.status(400).json({ error: 'Invalid order total.' });
+    }
+
+    // Get user's cart
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart || cart.products.length === 0) {
+      return res.status(400).json({ error: 'Your cart is empty.' });
+    }
+
+    // Create order
+    const order = new Order({
+      user: userId,
+      cart: cart._id,
+      total: total,
+      address: {
+        name: `${firstName} ${lastName}`,
+        email: email,
+        phone: phone,
+        address: address,
+        city: city,
+        state: state,
+        country: country,
+        pincode: pincode
+      },
+      paymentMethod: paymentMethod,
+      paymentStatus: 'pending'
+    });
+
+    await order.save();
+
+    // TODO: Handle payment processing based on paymentMethod
+    // if (paymentMethod === 'card') {
+    //   // Process card payment via Stripe/Razorpay
+    // } else if (paymentMethod === 'cod') {
+    //   // Mark as pending payment on delivery
+    // }
+
+    res.status(201).json({
+      success: true,
+      message: 'Order placed successfully.',
+      order: order
+    });
+  } catch (error) {
+    console.error('Checkout error:', error);
+    res.status(500).json({
+      error: 'Your order could not be processed. Please try again.'
+    });
+  }
+});
+
 // search orders api
 router.get('/search', auth, async (req, res) => {
   try {

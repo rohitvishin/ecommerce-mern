@@ -15,6 +15,26 @@ const OrderSchema = new Schema({
     type: Number,
     default: 0
   },
+  paymentMethod: {
+    type: String,
+    enum: ['card', 'cod'],
+    required: true
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'paid', 'failed'],
+    default: 'pending'
+  },
+  address: {
+    name: String,
+    email: String,
+    phone: String,
+    address: String,
+    city: String,
+    state: String,
+    country: String,
+    pincode: String
+  },
   updated: Date,
   created: {
     type: Date,

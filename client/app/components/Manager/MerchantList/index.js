@@ -87,9 +87,8 @@ const MerchantList = props => {
                     merchant.isActive ? 'Disable Merchant' : 'Enable Merchant'
                   }
                   popover={true}
-                  popoverTitle={`Are you sure you want to ${
-                    merchant.isActive ? 'disable' : 'enable'
-                  } ${merchant.name}'s merchant account?`}
+                  popoverTitle={`Are you sure you want to ${merchant.isActive ? 'disable' : 'enable'
+                    } ${merchant.name}'s merchant account?`}
                   popoverContent={renderMerchantPopover(merchant)}
                 />
               </>
