@@ -21,7 +21,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 class Signup extends React.PureComponent {
   state = {
-    captchaError: false
+    captchaError: false,
+    siteKeyMissing: false
   };
   componentDidMount() {
     const { merchant } = this.props.match.params;
@@ -40,11 +41,16 @@ class Signup extends React.PureComponent {
       subscribeChange
     } = this.props;
     const { captchaError } = this.state;
+    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
     const merchant = this.props.match.params.merchant;
     if (authenticated) return <Redirect to='/dashboard' />;
     const handleSubmit = event => {
       signupFormData.merchant = this.props.match.params.merchant;
       event.preventDefault();
+      if (!siteKey) {
+        this.setState({ siteKeyMissing: true });
+        return;
+      }
       const captchaToken = signupFormData && signupFormData.captchaToken;
       if (!captchaToken) {
         this.setState({ captchaError: true });
@@ -118,18 +124,20 @@ class Signup extends React.PureComponent {
                 />
                 <div className='mt-3 text-center'>
                   <ReCAPTCHA
-                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                    sitekey={siteKey}
                     onChange={value => {
                       signupChange('captchaToken', value);
-                      this.setState({ captchaError: false });
+                      this.setState({ captchaError: false, siteKeyMissing: false });
                     }}
                     onExpired={() => {
                       signupChange('captchaToken', '');
                     }}
                   />
-                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
+                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha') || this.state.siteKeyMissing) && (
                     <div className='text-danger small mt-2'>
-                      {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                      {this.state.siteKeyMissing
+                        ? 'ReCAPTCHA site key is not configured. Contact the administrator.'
+                        : formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
                     </div>
                   )}
                 </div>
