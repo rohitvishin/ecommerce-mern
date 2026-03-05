@@ -42,7 +42,7 @@ class Login extends React.PureComponent {
     } = this.props;
     const { captchaError } = this.state;
 
-    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+    const siteKey = process.env.RECAPTCHA_SITE;
 
     if (authenticated) return <Redirect to='/dashboard' />;
     const { merchant } = this.props.match.params;

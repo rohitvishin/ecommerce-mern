@@ -41,7 +41,7 @@ class Signup extends React.PureComponent {
       subscribeChange
     } = this.props;
     const { captchaError } = this.state;
-    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+    const siteKey = process.env.RECAPTCHA_SITE;
     const merchant = this.props.match.params.merchant;
     if (authenticated) return <Redirect to='/dashboard' />;
     const handleSubmit = event => {
