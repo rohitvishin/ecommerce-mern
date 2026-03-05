@@ -33,12 +33,8 @@ export const forgotPassword = () => {
 
       const user = getState().forgotPassword.forgotFormData;
 
-      // require captcha token
-      rules.captchaToken = 'required';
-
       const { isValid, errors } = allFieldsValidation(user, rules, {
-        'required.email': 'Email is required.',
-        'required.captchaToken': 'Please complete the captcha.'
+        'required.email': 'Email is required.'
       });
 
       if (!isValid) {

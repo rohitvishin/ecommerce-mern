@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const passport = require('passport');
 
 const auth = require('../../middleware/auth');
+const { authLimiter, strictAuthLimiter } = require('../../middleware/rateLimiter');
 
 // Bring in Models & Helpers
 const User = require('../../models/user');
@@ -18,28 +19,10 @@ const { EMAIL_PROVIDER, JWT_COOKIE } = require('../../constants');
 
 const { secret, tokenLife } = keys.jwt;
 
-router.post('/login', async (req, res) => {
+router.post('/login', strictAuthLimiter, async (req, res) => {
   try {
-    const { email, password, store, captchaToken } = req.body;
-    // verify captcha token with Google
-    try {
-      if (!captchaToken) {
-        return res.status(400).json({ error: 'Captcha token is missing.' });
-      }
-      const secret = process.env.RECAPTCHA_SECRET;
-      if (!secret) {
-        console.error('RECAPTCHA_SECRET not set on server');
-        return res.status(500).json({ error: 'Server captcha configuration error.' });
-      }
-      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(captchaToken)}`;
-      const verifyRes = await require('axios').post(verifyUrl);
-      if (!verifyRes || !verifyRes.data || verifyRes.data.success !== true) {
-        return res.status(400).json({ error: 'Failed captcha verification.' });
-      }
-    } catch (captchaErr) {
-      console.error('Captcha verification error', captchaErr);
-      return res.status(400).json({ error: 'Failed captcha verification.' });
-    }
+    const { email, password, store } = req.body;
+    // captcha verification removed
     if (!email) {
       return res
         .status(400)
@@ -100,28 +83,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', strictAuthLimiter, async (req, res) => {
   try {
-    const { email, firstName, lastName, password, isSubscribed, merchant, captchaToken } = req.body;
-    // verify captcha token with Google
-    try {
-      if (!captchaToken) {
-        return res.status(400).json({ error: 'Captcha token is missing.' });
-      }
-      const secret = process.env.RECAPTCHA_SECRET;
-      if (!secret) {
-        console.error('RECAPTCHA_SECRET not set on server');
-        return res.status(500).json({ error: 'Server captcha configuration error.' });
-      }
-      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(captchaToken)}`;
-      const verifyRes = await require('axios').post(verifyUrl);
-      if (!verifyRes || !verifyRes.data || verifyRes.data.success !== true) {
-        return res.status(400).json({ error: 'Failed captcha verification.' });
-      }
-    } catch (captchaErr) {
-      console.error('Captcha verification error', captchaErr);
-      return res.status(400).json({ error: 'Failed captcha verification.' });
-    }
+    const { email, firstName, lastName, password, isSubscribed, merchant } = req.body;
+    // captcha verification removed
     const store = await Merchant.findOne({ brandName: merchant });
     if (!store) {
       return res
@@ -206,28 +171,10 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/forgot', async (req, res) => {
+router.post('/forgot', strictAuthLimiter, async (req, res) => {
   try {
-    const { email, captchaToken } = req.body;
-    // verify captcha token with Google
-    try {
-      if (!captchaToken) {
-        return res.status(400).json({ error: 'Captcha token is missing.' });
-      }
-      const secret = process.env.RECAPTCHA_SECRET;
-      if (!secret) {
-        console.error('RECAPTCHA_SECRET not set on server');
-        return res.status(500).json({ error: 'Server captcha configuration error.' });
-      }
-      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(captchaToken)}`;
-      const verifyRes = await require('axios').post(verifyUrl);
-      if (!verifyRes || !verifyRes.data || verifyRes.data.success !== true) {
-        return res.status(400).json({ error: 'Failed captcha verification.' });
-      }
-    } catch (captchaErr) {
-      console.error('Captcha verification error', captchaErr);
-      return res.status(400).json({ error: 'Failed captcha verification.' });
-    }
+    const { email } = req.body;
+    // captcha verification removed
 
     if (!email) {
       return res

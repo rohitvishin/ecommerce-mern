@@ -17,13 +17,9 @@ import Button from '../../components/Common/Button';
 import Checkbox from '../../components/Common/Checkbox';
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
 import SignupProvider from '../../components/Common/SignupProvider';
-import ReCAPTCHA from 'react-google-recaptcha';
 
 class Signup extends React.PureComponent {
-  state = {
-    captchaError: false,
-    siteKeyMissing: false
-  };
+  state = {};
   componentDidMount() {
     const { merchant } = this.props.match.params;
     this.props.findMerchant(merchant);
@@ -40,22 +36,12 @@ class Signup extends React.PureComponent {
       signUp,
       subscribeChange
     } = this.props;
-    const { captchaError } = this.state;
-    const siteKey = process.env.RECAPTCHA_SITE;
+    const { } = this.state;
     const merchant = this.props.match.params.merchant;
     if (authenticated) return <Redirect to='/dashboard' />;
     const handleSubmit = event => {
       signupFormData.merchant = this.props.match.params.merchant;
       event.preventDefault();
-      if (!siteKey) {
-        this.setState({ siteKeyMissing: true });
-        return;
-      }
-      const captchaToken = signupFormData && signupFormData.captchaToken;
-      if (!captchaToken) {
-        this.setState({ captchaError: true });
-        return;
-      }
       signUp();
     };
 
@@ -122,31 +108,7 @@ class Signup extends React.PureComponent {
                     signupChange(name, value);
                   }}
                 />
-                <div className='mt-3 text-center'>
-                  {siteKey ? (
-                    <>
-                      <ReCAPTCHA
-                        sitekey={siteKey}
-                        onChange={value => {
-                          signupChange('captchaToken', value);
-                          this.setState({ captchaError: false, siteKeyMissing: false });
-                        }}
-                        onExpired={() => {
-                          signupChange('captchaToken', '');
-                        }}
-                      />
-                      {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
-                        <div className='text-danger small mt-2'>
-                          {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className='text-danger small mt-2'>
-                      ReCAPTCHA site key is not configured. Contact the administrator.
-                    </div>
-                  )}
-                </div>
+                {/* removed reCAPTCHA */}
               </Col>
             </Col>
             <Col
