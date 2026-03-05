@@ -147,6 +147,31 @@ export const fetchOrder = (id, withLoading = true) => {
   };
 };
 
+export const downloadInvoice = (orderId) => {
+  console.log("Downloading invoice for order:", orderId);
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/order/${orderId}/invoice`,
+        {
+          responseType: 'blob'
+        }
+      );
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `invoice-${orderId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download invoice', err);
+    }
+  }
+};
 export const cancelOrder = () => {
   return async (dispatch, getState) => {
     try {

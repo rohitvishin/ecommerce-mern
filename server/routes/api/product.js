@@ -428,7 +428,7 @@ router.put(
           const merchant = await Merchant.findOne({ brand: updatedProduct.brand }).select('email');
           console.log('merchant mail', merchant.email);
           // send email to merchant if product is activated by admin
-          await googlemail.sendEmail(merchant.email, 'product-activated', req.headers.host, updatedProduct);
+          await googlemail.sendEmail(merchant.email, 'product-activated', process.env.CLIENT_URL, updatedProduct);
         }
       });
 

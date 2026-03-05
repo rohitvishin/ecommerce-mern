@@ -7,11 +7,13 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../../../constants';
 
 import { formatDate } from '../../../utils/date';
 
 const OrderList = props => {
-  const { orders } = props;
+  const { orders, downloadInvoice } = props;
 
   const renderFirstItem = order => {
     if (order.products) {
@@ -29,7 +31,6 @@ const OrderList = props => {
       return <img className='item-image' src='/images/placeholder-image.png' />;
     }
   };
-
   return (
     <div className='order-list'>
       {orders.map((order, index) => (
@@ -68,6 +69,14 @@ const OrderList = props => {
               </div>
             </div>
           </Link>
+          <div className='order-actions p-2'>
+            <button
+              className='btn btn-sm btn-outline-primary'
+              onClick={() => downloadInvoice(order._id)}
+            >
+              Download Invoice
+            </button>
+          </div>
         </div>
       ))}
     </div>

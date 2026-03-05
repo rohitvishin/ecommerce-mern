@@ -11,6 +11,7 @@ const auth = require('../../middleware/auth');
 const googlemail = require('../../services/googlemail');
 const store = require('../../utils/store');
 const { ROLES, CART_ITEM_STATUS } = require('../../constants');
+const PDFDocument = require('pdfkit');
 
 router.post('/add', auth, async (req, res) => {
   try {
@@ -338,6 +339,154 @@ router.get('/:orderId', auth, async (req, res) => {
   } catch (error) {
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
+    });
+  }
+});
+
+// generate invoice PDF for an order
+router.get('/:orderId/invoice', auth, async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+
+    let orderDoc = null;
+
+    if (req.user.role === ROLES.Admin) {
+      orderDoc = await Order.findOne({ _id: orderId }).populate({
+        path: 'cart',
+        populate: {
+          path: 'products.product',
+          populate: {
+            path: 'brand'
+          }
+        }
+      });
+    } else {
+      const user = req.user._id;
+      orderDoc = await Order.findOne({ _id: orderId, user }).populate({
+        path: 'cart',
+        populate: {
+          path: 'products.product',
+          populate: {
+            path: 'brand'
+          }
+        }
+      });
+    }
+
+    if (!orderDoc || !orderDoc.cart) {
+      return res.status(404).json({
+        message: `Cannot find order with the id: ${orderId}.`
+      });
+    }
+
+    let order = {
+      _id: orderDoc._id,
+      total: orderDoc.total,
+      created: orderDoc.created,
+      totalTax: 0,
+      products: orderDoc?.cart?.products,
+      cartId: orderDoc.cart._id
+    };
+
+    order = store.caculateTaxAmount(order);
+
+    const doc = new PDFDocument({ size: 'A4', margin: 50 });
+
+    res.setHeader('Content-disposition', `attachment; filename=invoice-${order._id}.pdf`);
+    res.setHeader('Content-type', 'application/pdf');
+
+    doc.pipe(res);
+
+    const fmt = v => `$${Number(v || 0).toFixed(2)}`;
+
+    // Store name (from product.store if available)
+    const storeName =
+      (order.products && order.products[0] && order.products[0].product && order.products[0].product.store) ||
+      'Store';
+
+    // Header
+    doc.fontSize(18).text(storeName, { align: 'left' });
+    doc.fontSize(12).text('Invoice', { align: 'right' });
+    doc.moveDown();
+
+    // Order meta
+    doc.fontSize(10).text(`Order #: ${order._id}`);
+    doc.text(`Date: ${new Date(order.created).toLocaleString()}`);
+    doc.moveDown();
+
+    // Customer details (prefer order.address)
+    doc.fontSize(12).text('Bill To:');
+    if (order.address) {
+      const a = order.address;
+      if (a.name) doc.text(a.name);
+      if (a.email) doc.text(a.email);
+      if (a.phone) doc.text(a.phone);
+      const addr = [a.address, a.city, a.state, a.country, a.pincode]
+        .filter(Boolean)
+        .join(', ');
+      if (addr) doc.text(addr);
+    } else if (order.user && order.user.email) {
+      doc.text(order.user.email);
+    }
+
+    doc.moveDown();
+
+    // Items table header
+    doc.fontSize(12).text('Items', { underline: true });
+    doc.moveDown(0.5);
+
+    const tableTop = doc.y;
+    const itemX = 50;
+    const qtyX = 330;
+    const priceX = 380;
+    const totalX = 460;
+
+    doc.fontSize(10).text('Product', itemX, tableTop);
+    doc.text('Qty', qtyX, tableTop);
+    doc.text('Price', priceX, tableTop);
+    doc.text('Total', totalX, tableTop);
+
+    doc.moveDown(0.5);
+
+    // Items
+    if (order.products && order.products.length > 0) {
+      let y = doc.y;
+      order.products.forEach(item => {
+        const product = item.product || {};
+        const name = product.name || product.title || 'Product';
+        const qty = item.quantity || 1;
+        const price = item.price || product.price || 0;
+        const lineTotal = Number((price * qty).toFixed(2));
+
+        doc.fontSize(10).text(name, itemX, y, { width: 260 });
+        doc.text(String(qty), qtyX, y);
+        doc.text(fmt(price), priceX, y);
+        doc.text(fmt(lineTotal), totalX, y);
+
+        y += 18;
+      });
+
+      doc.moveTo(itemX, y + 4).lineTo(totalX + 80, y + 4).stroke();
+      doc.y = y + 12;
+    }
+
+    // Totals
+    const subtotal = Number(order.total ? Number(order.total).toFixed(2) : 0);
+    if (order.totalTax) {
+      doc.fontSize(10).text(`Subtotal: ${fmt(subtotal)}`, { align: 'right' });
+      doc.text(`Tax: ${fmt(order.totalTax)}`, { align: 'right' });
+    } else {
+      doc.fontSize(10).text(`Subtotal: ${fmt(subtotal)}`, { align: 'right' });
+    }
+
+    const total = Number(order.totalWithTax ? Number(order.totalWithTax).toFixed(2) : subtotal);
+    doc.fontSize(12).text(`Total: ${fmt(total)}`, { align: 'right' });
+
+    doc.end();
+  } catch (error) {
+    console.error('Invoice generation error:', error);
+    res.status(500).json({
+      error: 'Invoice could not be generated. Please try again.'
     });
   }
 });
