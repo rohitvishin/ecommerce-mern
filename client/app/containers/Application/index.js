@@ -32,7 +32,11 @@ import Contact from '../Contact';
 import OrderSuccess from '../OrderSuccess';
 import OrderPage from '../OrderPage';
 import AuthSuccess from '../AuthSuccess';
-
+import PrivacyPolicy from '../Policy/Privacy';
+import TermsAndConditions from '../Policy/Terms';
+import ShippingPolicy from '../Policy/Shipping';
+import ReturnRefundPolicy from '../Policy/Return';
+import MerchantAgreement from '../Policy/Merchant';
 import Footer from '../../components/Common/Footer';
 import Page404 from '../../components/Common/Page404';
 import { CART_ITEMS } from '../../constants';
@@ -84,6 +88,14 @@ class Application extends React.PureComponent {
             <Container>
               <div className='wrapper'>
                 <Switch>
+                  {/* policy route */}
+                  <Route path='/privacy-policy' component={PrivacyPolicy} />
+                  <Route path='/terms-and-conditions' component={TermsAndConditions} />
+                  <Route path='/shipping-policy' component={ShippingPolicy} />
+                  <Route path='/return-refund-policy' component={ReturnRefundPolicy} />
+                  <Route path='/merchant-agreement' component={MerchantAgreement} />
+                  {/* policy route end */}
+
                   {/* merchant / admin route start */}
                   <Route path='/shop' component={Shop} />
                   <Route path='/sell' component={Sell} />

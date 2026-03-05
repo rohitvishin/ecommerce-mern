@@ -1,1 +1,153 @@
 // Here you can add other styles
+/* ===============================
+   Legal Pages Layout
+================================ */
+
+.terms-page,
+.privacy-policy-page,
+.merchant-agreement-page,
+.refund-policy-page,
+.shipping-policy-page {
+    padding: 60px 0;
+    background: #fff;
+}
+
+
+/* ===============================
+   Content Wrapper
+================================ */
+
+.terms-content,
+.privacy-content,
+.agreement-content,
+.refund-content,
+.shipping-content {
+    max-width: 850px;
+    margin: auto;
+}
+
+
+/* ===============================
+   Headings
+================================ */
+
+.terms-content h1,
+.privacy-content h1,
+.agreement-content h1,
+.refund-content h1,
+.shipping-content h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.terms-content h4,
+.privacy-content h4,
+.agreement-content h4,
+.refund-content h4,
+.shipping-content h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+
+/* ===============================
+   Paragraphs
+================================ */
+
+.terms-content p,
+.privacy-content p,
+.agreement-content p,
+.refund-content p,
+.shipping-content p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+
+/* ===============================
+   Lists
+================================ */
+
+.terms-content ul,
+.privacy-content ul,
+.agreement-content ul,
+.refund-content ul,
+.shipping-content ul {
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.terms-content li,
+.privacy-content li,
+.agreement-content li,
+.refund-content li,
+.shipping-content li {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+
+/* ===============================
+   Sections
+================================ */
+
+.terms-content section,
+.privacy-content section,
+.agreement-content section,
+.refund-content section,
+.shipping-content section {
+    margin-bottom: 25px;
+}
+
+
+/* ===============================
+   Strong text
+================================ */
+
+.terms-content strong,
+.privacy-content strong,
+.agreement-content strong,
+.refund-content strong,
+.shipping-content strong {
+    font-weight: 600;
+    color: #222;
+}
+
+
+/* ===============================
+   Mobile Optimization
+================================ */
+
+@media (max-width: 768px) {
+
+    .terms-page,
+    .privacy-policy-page,
+    .merchant-agreement-page,
+    .refund-policy-page,
+    .shipping-policy-page {
+        padding: 40px 15px;
+    }
+
+    .terms-content h1,
+    .privacy-content h1,
+    .agreement-content h1,
+    .refund-content h1,
+    .shipping-content h1 {
+        font-size: 26px;
+    }
+
+    .terms-content h4,
+    .privacy-content h4,
+    .agreement-content h4,
+    .refund-content h4,
+    .shipping-content h4 {
+        font-size: 17px;
+    }
+
+}

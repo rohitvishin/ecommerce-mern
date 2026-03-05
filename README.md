@@ -2,4 +2,4 @@ MERCHANT LOGIN:
 
 
 REPLACE WITH ORIGINAL DOMAIN:
-zoekart
+zostore
