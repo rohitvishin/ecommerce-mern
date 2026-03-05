@@ -55,9 +55,9 @@ exports.productActivatedEmail = (host, productName) => {
 };
 exports.signupEmail = (host, name) => {
   const message = {
-    subject: 'Account Registration',
+    subject: `Account Registration - ${name.storeId}`,
     text: `Hi ${name.firstName} ${name.lastName}! Thank you for creating an account with us!. \n\n` +
-      `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
+      `Please click on the following link, or paste this into your browser to browse the products:\n\n` +
       `${host}/${name.storeId}\n\n` +
       `If you did not request this, please ignore this email and your account will remain unchanged.\n`
   };
