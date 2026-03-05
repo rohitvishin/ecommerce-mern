@@ -3,9 +3,7 @@ exports.resetEmail = (host, resetToken) => {
     subject: 'Reset Password',
     text:
       `${'You are receiving this because you have requested to reset your password for your account.\n\n' +
-      'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-      'http://'
-      }${host}/reset-password/${resetToken}\n\n` +
+      'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${host}/reset-password/${resetToken}\n\n` +
       `If you did not request this, please ignore this email and your password will remain unchanged.\n`
   };
 
@@ -27,9 +25,7 @@ exports.merchantSignup = (host, { resetToken, email }) => {
   const message = {
     subject: 'Merchant Registration',
     text: `${'Congratulations! Your application has been accepted. Please complete your Merchant account signup by clicking on the link below. \n\n' +
-      'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-      'http://'
-      }${host}/merchant-signup/${resetToken}?email=${email}\n\n`
+      'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${host}/merchant-signup/${resetToken}?email=${email}\n\n`
   };
 
   return message;
@@ -40,7 +36,7 @@ exports.merchantWelcome = (host, name) => {
     subject: 'Merchant Registration',
     text:
       `Hi ${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
-      `Your store link https://${host}/${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
+      `Your store link ${host}/${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
       `It looks like you already have a member account with us. Please sign in with your member credentials and you will be able to see your merchant account.`
   };
 
@@ -52,7 +48,7 @@ exports.productActivatedEmail = (host, productName) => {
     subject: 'Product Activated',
     text:
       `Hi! Your product ${productName.name} has been activated by admin and is now live on your store. \n\n` +
-      `Your product link http://${host}/product/${productName.slug} \n\n`
+      `Your product link ${host}/product/${productName.slug} \n\n`
   };
 
   return message;
@@ -62,7 +58,7 @@ exports.signupEmail = (host, name) => {
     subject: 'Account Registration',
     text: `Hi ${name.firstName} ${name.lastName}! Thank you for creating an account with us!. \n\n` +
       `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-      `http://${host}/${name.storeId}\n\n` +
+      `${host}/${name.storeId}\n\n` +
       `If you did not request this, please ignore this email and your account will remain unchanged.\n`
   };
 

@@ -146,7 +146,7 @@ router.post('/register', strictAuthLimiter, async (req, res) => {
     await googlemail.sendEmail(
       registeredUser.email,
       'signup',
-      req.headers.host,
+      process.env.CLIENT_URL,
       registeredUser
     );
 
@@ -201,7 +201,7 @@ router.post('/forgot', strictAuthLimiter, async (req, res) => {
     await googlemail.sendEmail(
       existingUser.email,
       'reset',
-      req.headers.host,
+      process.env.CLIENT_URL,
       resetToken
     );
 
