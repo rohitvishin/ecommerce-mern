@@ -31,7 +31,7 @@ class ForgotPassword extends React.PureComponent {
     } = this.props;
     const { merchant } = this.props.match.params;
     if (authenticated) return <Redirect to='/dashboard' />;
-    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+    const siteKey = process.env.RECAPTCHA_SITE;
     const handleSubmit = event => {
       event.preventDefault();
       if (!siteKey) {

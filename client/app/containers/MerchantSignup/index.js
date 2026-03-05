@@ -33,7 +33,7 @@ class MerchantSignup extends React.PureComponent {
       history
     } = this.props;
     const { captchaError } = this.state;
-    const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+    const siteKey = process.env.RECAPTCHA_SITE;
     const handleSubmit = event => {
       event.preventDefault();
       if (!siteKey) {
