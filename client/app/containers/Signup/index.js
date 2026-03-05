@@ -123,21 +123,27 @@ class Signup extends React.PureComponent {
                   }}
                 />
                 <div className='mt-3 text-center'>
-                  <ReCAPTCHA
-                    sitekey={siteKey}
-                    onChange={value => {
-                      signupChange('captchaToken', value);
-                      this.setState({ captchaError: false, siteKeyMissing: false });
-                    }}
-                    onExpired={() => {
-                      signupChange('captchaToken', '');
-                    }}
-                  />
-                  {(formErrors['captcha'] || (captchaError && 'Please complete the captcha') || this.state.siteKeyMissing) && (
+                  {siteKey ? (
+                    <>
+                      <ReCAPTCHA
+                        sitekey={siteKey}
+                        onChange={value => {
+                          signupChange('captchaToken', value);
+                          this.setState({ captchaError: false, siteKeyMissing: false });
+                        }}
+                        onExpired={() => {
+                          signupChange('captchaToken', '');
+                        }}
+                      />
+                      {(formErrors['captcha'] || (captchaError && 'Please complete the captcha')) && (
+                        <div className='text-danger small mt-2'>
+                          {formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                        </div>
+                      )}
+                    </>
+                  ) : (
                     <div className='text-danger small mt-2'>
-                      {this.state.siteKeyMissing
-                        ? 'ReCAPTCHA site key is not configured. Contact the administrator.'
-                        : formErrors['captcha'] || (captchaError && 'Please complete the captcha')}
+                      ReCAPTCHA site key is not configured. Contact the administrator.
                     </div>
                   )}
                 </div>
