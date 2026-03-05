@@ -129,7 +129,7 @@ class Navigation extends React.PureComponent {
       shopNumber
     } = this.props;
     const pathName = history.location.pathname.split('/')[1];
-    const merchant = shopName ? shopName : 'zoekart';
+    const merchant = shopName ? shopName : 'zostore';
     const phoneNumber = shopNumber ? shopNumber : '8108889047';
     const inputProps = {
       placeholder: 'Search Products',

@@ -9,7 +9,7 @@ import {
     Button,
     Collapse
 } from "reactstrap";
-
+import Footer from "../../components/Common/Footer";
 const Website = () => {
     const [openFAQ, setOpenFAQ] = useState(null);
 
@@ -52,7 +52,7 @@ const Website = () => {
                                 </Link>
 
 
-                                <Link to="/zoekart/" target="_blank" rel="noopener noreferrer">
+                                <Link to="/zostore/" target="_blank" rel="noopener noreferrer">
                                     <Button
                                         outline
                                         color="dark"
@@ -221,7 +221,7 @@ const Website = () => {
                         </div>
                     </Col>
                 </Row>
-
+                <Footer />
             </Container>
         </div>
     );

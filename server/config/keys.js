@@ -1,6 +1,6 @@
 module.exports = {
   app: {
-    name: 'zoekart',
+    name: 'zostore',
     businessNumber: '8108889047',
     apiURL: `${process.env.BASE_API_URL}`,
     clientURL: process.env.CLIENT_URL

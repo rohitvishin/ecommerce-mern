@@ -12,7 +12,7 @@ export const defaultAction = () => {
   };
 };
 
-export const setShopInfo = (shopName = 'zoekart', shopNumber = '8108889047') => {
+export const setShopInfo = (shopName = 'zostore', shopNumber = '8108889047') => {
   return {
     type: SET_SHOP_INFO,
     payload: {

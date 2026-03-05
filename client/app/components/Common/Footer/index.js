@@ -14,8 +14,11 @@ import Newsletter from '../../../containers/Newsletter';
 const Footer = () => {
   const infoLinks = [
     { id: 0, name: 'Contact Us', to: '/contact' },
-    { id: 1, name: 'Sell With Us', to: '/sell' },
-    { id: 2, name: 'Shipping', to: '/shipping' }
+    { id: 1, name: 'Privacy Policy', to: '/privacy-policy' },
+    { id: 2, name: 'Terms and Conditions', to: '/terms-and-conditions' },
+    { id: 3, name: 'Return & Refund Policy', to: '/return-refund-policy' },
+    { id: 4, name: 'Merchant Agreement', to: '/merchant-agreement' },
+    { id: 5, name: 'Shipping Policy', to: '/shipping-policy' }
   ];
 
   const footerBusinessLinks = (
@@ -51,10 +54,12 @@ const Footer = () => {
           </div>
           <div className='footer-block'>
             <div className='block-title'>
-              <h3 className='text-uppercase'>Links</h3>
+              <h3 className='text-uppercase'>Contact</h3>
             </div>
             <div className='block-content'>
-              <ul>{footerLinks}</ul>
+              <ul>WhatsApp: <a href='https://wa.me/7045715525' target='_blank' rel='noreferrer noopener'>Chat with us</a></ul>
+              <ul>Phone: <a href='tel:+917045715525'>+91 7045715525</a></ul>
+              <ul>Email: <a href='mailto:mail@zostore.in'>mail@zostore.in</a></ul>
             </div>
           </div>
           <div className='footer-block'>
