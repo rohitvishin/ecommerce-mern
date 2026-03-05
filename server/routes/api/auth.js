@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const passport = require('passport');
 
 const auth = require('../../middleware/auth');
+const { authLimiter, strictAuthLimiter } = require('../../middleware/rateLimiter');
 
 // Bring in Models & Helpers
 const User = require('../../models/user');
@@ -18,7 +19,7 @@ const { EMAIL_PROVIDER, JWT_COOKIE } = require('../../constants');
 
 const { secret, tokenLife } = keys.jwt;
 
-router.post('/login', async (req, res) => {
+router.post('/login', strictAuthLimiter, async (req, res) => {
   try {
     const { email, password, store } = req.body;
     // captcha verification removed
@@ -82,7 +83,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', strictAuthLimiter, async (req, res) => {
   try {
     const { email, firstName, lastName, password, isSubscribed, merchant } = req.body;
     // captcha verification removed
@@ -170,7 +171,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/forgot', async (req, res) => {
+router.post('/forgot', strictAuthLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     // captcha verification removed

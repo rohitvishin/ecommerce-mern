@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 // Bring in Models & Helpers
 const { MERCHANT_STATUS, ROLES } = require('../../constants');
+const { authLimiter, strictAuthLimiter } = require('../../middleware/rateLimiter');
 const Merchant = require('../../models/merchant');
 const User = require('../../models/user');
 const Brand = require('../../models/brand');
@@ -221,7 +222,7 @@ router.put('/reject/:id', auth, async (req, res) => {
     });
   }
 });
-router.post('/signup', async (req, res) => {
+router.post('/signup', strictAuthLimiter, async (req, res) => {
   try {
     const { email, firstName, lastName, password, storeName, business, phone } = req.body;
     // captcha verification removed
