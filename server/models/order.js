@@ -25,6 +25,10 @@ const OrderSchema = new Schema({
     enum: ['pending', 'paid', 'failed'],
     default: 'pending'
   },
+  store: {
+    type: String,
+    default: null
+  },
   address: {
     name: String,
     email: String,

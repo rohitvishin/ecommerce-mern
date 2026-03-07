@@ -69,14 +69,6 @@ const OrderList = props => {
               </div>
             </div>
           </Link>
-          <div className='order-actions p-2'>
-            <button
-              className='btn btn-sm btn-outline-primary'
-              onClick={() => downloadInvoice(order._id)}
-            >
-              Download Invoice
-            </button>
-          </div>
         </div>
       ))}
     </div>

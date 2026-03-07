@@ -4,8 +4,10 @@ const router = express.Router();
 // Bring in Models & Helpers
 const Review = require('../../models/review');
 const Product = require('../../models/product');
+const Merchant = require('../../models/merchant');
 const auth = require('../../middleware/auth');
 const { REVIEW_STATUS } = require('../../constants');
+const { ROLES } = require('../../constants');
 
 router.post('/add', auth, async (req, res) => {
   try {
@@ -31,11 +33,15 @@ router.post('/add', auth, async (req, res) => {
 });
 
 // fetch all reviews api
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
+    console.log('merchant:', req.user.merchant);
+    console.log('role:', req.user.role);
+    const merchant = await Merchant.findOne({ _id: req.user.merchant }).select('brandName');
+    const isAdmin = req.user.role === ROLES.Admin;
 
-    const reviews = await Review.find()
+    const reviews = await Review.find({})
       .sort('-created')
       .populate({
         path: 'user',
@@ -43,23 +49,26 @@ router.get('/', async (req, res) => {
       })
       .populate({
         path: 'product',
-        select: 'name slug imageUrl'
+        select: 'name slug imageUrl brand',
+        match: isAdmin ? {} : { store: merchant.brandName }
       })
-      .limit(limit * 1)
       .skip((page - 1) * limit)
-      .exec();
+      .limit(limit * 1)
+      .lean();
+
+    const filteredReviews = isAdmin ? reviews : reviews.filter(r => r.product);
 
     const count = await Review.countDocuments();
 
     res.status(200).json({
-      reviews,
+      reviews: filteredReviews,
       totalPages: Math.ceil(count / limit),
       currentPage: Number(page),
       count
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });

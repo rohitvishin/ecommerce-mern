@@ -14,7 +14,7 @@ import Button from '../../Common/Button';
 import DropdownConfirm from '../../Common/DropdownConfirm';
 
 const OrderItems = props => {
-  const { order, user, updateOrderItemStatus } = props;
+  const { order, user, updateOrderItemStatus, downloadInvoice } = props;
 
   const renderPopoverContent = item => {
     const statuses = Object.values(CART_ITEM_STATUS);
@@ -35,20 +35,26 @@ const OrderItems = props => {
   };
 
   const renderItemsAction = item => {
-    const isAdmin = user.role === ROLES.Admin;
-
     if (item.status === CART_ITEM_STATUS.Delivered) {
       return (
-        <Link
-          to={`/product/${item.product.slug}`}
-          className='btn-link text-center py-2 fs-12'
-          style={{ minWidth: 120 }}
-        >
-          Reivew Product
-        </Link>
+        <div className='order-actions p-2'>
+          <Link
+            to={`/product/${item.product.slug}`}
+            className='btn-link text-center mr-2 fs-12'
+            style={{ minWidth: 120 }}
+          >
+            Review Product
+          </Link>
+          <button
+            className='btn-link text-center mr-2 fs-12'
+            onClick={() => downloadInvoice(order._id)}
+          >
+            Download Invoice
+          </button>
+        </div>
       );
     } else if (item.status !== 'Cancelled') {
-      if (!isAdmin) {
+      if (user.role === ROLES.Member) {
         return (
           <DropdownConfirm label='Cancel'>
             <div className='d-flex flex-column align-items-center justify-content-center p-2'>
@@ -69,7 +75,7 @@ const OrderItems = props => {
         return (
           <DropdownConfirm
             label={item.product && item.status}
-            className={isAdmin ? 'admin' : ''}
+            className='admin'
           >
             {renderPopoverContent(item)}
           </DropdownConfirm>
@@ -90,8 +96,8 @@ const OrderItems = props => {
                   <img
                     className='item-image'
                     src={`${item.product && item.product.imageUrl
-                        ? item.product.imageUrl
-                        : '/images/placeholder-image.png'
+                      ? item.product.imageUrl
+                      : '/images/placeholder-image.png'
                       }`}
                   />
                   <div className='d-md-flex flex-1 align-items-start ml-4 item-box'>

@@ -68,7 +68,6 @@ export const fetchOrders = (page = 1) => {
     }
   };
 };
-
 export const fetchAccountOrders = (page = 1) => {
   return async (dispatch, getState) => {
     try {

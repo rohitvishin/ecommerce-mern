@@ -64,6 +64,46 @@ const OrderMeta = props => {
           {renderMetaAction()}
         </Col>
       </Row>
+      <hr />
+      <h2 className='mb-0'>Shipping Details</h2>
+      <hr />
+      <div className='d-flex align-items-center justify-content-between mb-3 title'>
+        <Col xs='12' md='8'>
+          <Row>
+            <Col xs='4'>
+              <p className='one-line-ellipsis'>Customer Name:</p>
+            </Col>
+            <Col xs='8'>
+              <span className='order-label one-line-ellipsis'>{` ${order.customer.name}`}</span>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs='4'>
+              <p className='one-line-ellipsis'>Customer Mobile:</p>
+            </Col>
+            <Col xs='8'>
+              <span className='order-label one-line-ellipsis'>{` ${order.customer.phone}`}</span>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs='4'>
+              <p className='one-line-ellipsis'>Customer Email:</p>
+            </Col>
+            <Col xs='8'>
+              <span className='order-label one-line-ellipsis'>{` ${order.customer.email}`}</span>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs='4'>
+              <p className='one-line-ellipsis'>Customer Address:</p>
+            </Col>
+            <Col xs='8'>
+              <span className='order-label one-line-ellipsis'>{` ${order.customer.address}`}</span>
+              <span className='order-label one-line-ellipsis'>{`${order.customer.city} - ${order.customer.pincode}, ${order.customer.state}`}</span>
+            </Col>
+          </Row>
+        </Col>
+      </div>
     </div>
   );
 };

@@ -355,6 +355,7 @@ export const findMerchant = (brandName) => {
         dispatch(push('/'));
       } else {
         const { brandName, phoneNumber } = response.data.merchant;
+        console.log('shop found:', brandName);
         dispatch(setShopInfo(brandName, phoneNumber));
       }
     } catch (error) {

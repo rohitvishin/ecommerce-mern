@@ -27,19 +27,12 @@ const OrderDetails = props => {
             order={order}
             user={user}
             updateOrderItemStatus={updateOrderItemStatus}
+            downloadInvoice={downloadInvoice}
           />
         </Col>
         <Col xs='12' lg='4' className='mt-5 mt-lg-0'>
           <OrderSummary order={order} />
         </Col>
-        <div className='order-actions p-2'>
-          <button
-            className='btn btn-sm btn-outline-primary'
-            onClick={() => downloadInvoice(order._id)}
-          >
-            Download Invoice
-          </button>
-        </div>
       </Row>
     </div>
   );

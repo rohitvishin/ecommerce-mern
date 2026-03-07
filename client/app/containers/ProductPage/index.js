@@ -55,6 +55,10 @@ class ProductPage extends React.PureComponent {
       reviewChange,
       reviewFormErrors
     } = this.props;
+    if (!isLoading && product.brand && product.brand.name) {
+      const brandName = product.brand.name;
+      this.props.findMerchant(brandName);
+    }
     return (
       <div className='product-shop'>
         {isLoading ? (
