@@ -6,6 +6,7 @@ const Mongoose = require('mongoose');
 const Order = require('../../models/order');
 const Cart = require('../../models/cart');
 const Product = require('../../models/product');
+const Merchant = require('../../models/merchant');
 const auth = require('../../middleware/auth');
 // const mailgun = require('../../services/mailgun');
 const googlemail = require('../../services/googlemail');
@@ -51,7 +52,7 @@ router.post('/add', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });
@@ -70,7 +71,8 @@ router.post('/checkout', auth, async (req, res) => {
       country,
       pincode,
       paymentMethod,
-      total
+      total,
+      store
     } = req.body;
 
     // Validate required fields
@@ -103,10 +105,11 @@ router.post('/checkout', auth, async (req, res) => {
     }
 
     // Create order
-    const order = new Order({
+    const newOrder = {
       user: userId,
       cart: cart._id,
       total: total,
+      store: store,
       address: {
         name: `${firstName} ${lastName}`,
         email: email,
@@ -119,7 +122,8 @@ router.post('/checkout', auth, async (req, res) => {
       },
       paymentMethod: paymentMethod,
       paymentStatus: 'pending'
-    });
+    };
+    const order = new Order(newOrder);
 
     await order.save();
 
@@ -129,6 +133,8 @@ router.post('/checkout', auth, async (req, res) => {
     // } else if (paymentMethod === 'cod') {
     //   // Mark as pending payment on delivery
     // }
+    // send order confirmation mail
+    await googlemail.sendEmail(email, 'order-confirmation', newOrder);
 
     res.status(201).json({
       success: true,
@@ -138,7 +144,7 @@ router.post('/checkout', auth, async (req, res) => {
   } catch (error) {
     console.error('Checkout error:', error);
     res.status(500).json({
-      error: 'Your order could not be processed. Please try again.'
+      error: error.message || 'Your order could not be processed. Please try again.'
     });
   }
 });
@@ -249,13 +255,11 @@ router.get('/', auth, async (req, res) => {
 });
 
 // fetch my orders api
-router.get('/me', auth, async (req, res) => {
+router.get('/storeOrder', auth, async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-    const user = req.user._id;
-    const query = { user };
-
-    const ordersDoc = await Order.find(query)
+    const store = req.query.store;
+    const ordersDoc = await Order.find({ store: store })
       .sort('-created')
       .populate({
         path: 'cart',
@@ -270,7 +274,7 @@ router.get('/me', auth, async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
-    const count = await Order.countDocuments(query);
+    const count = await Order.countDocuments({ store: store });
     const orders = store.formatOrders(ordersDoc);
 
     res.status(200).json({
@@ -285,6 +289,72 @@ router.get('/me', auth, async (req, res) => {
     });
   }
 });
+// fetch my orders api
+router.get('/me', auth, async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    if (req.user.role === ROLES.Merchant) {
+      const merchantId = req.user.merchant;
+      const storeName = await Merchant.findById(merchantId).select('brandName');
+      const query = { store: storeName.brandName };
+      const ordersDoc = await Order.find(query)
+        .sort('-created')
+        .populate({
+          path: 'cart',
+          populate: {
+            path: 'products.product',
+            populate: {
+              path: 'brand'
+            }
+          }
+        })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+      const count = await Order.countDocuments(query);
+      const orders = store.formatOrders(ordersDoc);
+      res.status(200).json({
+        orders,
+        totalPages: Math.ceil(count / limit),
+        currentPage: Number(page),
+        count
+      });
+    } else {
+      const user = req.user._id;
+      const query = { user };
+      const ordersDoc = await Order.find(query)
+        .sort('-created')
+        .populate({
+          path: 'cart',
+          populate: {
+            path: 'products.product',
+            populate: {
+              path: 'brand'
+            }
+          }
+        })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+      const count = await Order.countDocuments(query);
+      const orders = store.formatOrders(ordersDoc);
+      res.status(200).json({
+        orders,
+        totalPages: Math.ceil(count / limit),
+        currentPage: Number(page),
+        count
+      });
+    }
+
+
+
+
+  } catch (error) {
+    res.status(400).json({
+      error: 'Your request could not be processed. Please try again.'
+    });
+  }
+});
 
 // fetch order api
 router.get('/:orderId', auth, async (req, res) => {
@@ -293,7 +363,7 @@ router.get('/:orderId', auth, async (req, res) => {
 
     let orderDoc = null;
 
-    if (req.user.role === ROLES.Admin) {
+    if (req.user.role === ROLES.Admin || req.user.role === ROLES.Merchant) {
       orderDoc = await Order.findOne({ _id: orderId }).populate({
         path: 'cart',
         populate: {
@@ -328,7 +398,8 @@ router.get('/:orderId', auth, async (req, res) => {
       created: orderDoc.created,
       totalTax: 0,
       products: orderDoc?.cart?.products,
-      cartId: orderDoc.cart._id
+      cartId: orderDoc.cart._id,
+      customer: orderDoc.address ? orderDoc.address : null,
     };
 
     order = store.caculateTaxAmount(order);
@@ -400,9 +471,7 @@ router.get('/:orderId/invoice', auth, async (req, res) => {
     const fmt = v => `$${Number(v || 0).toFixed(2)}`;
 
     // Store name (from product.store if available)
-    const storeName =
-      (order.products && order.products[0] && order.products[0].product && order.products[0].product.store) ||
-      'Store';
+    const storeName = orderDoc.store || 'Store';
 
     // Header
     doc.fontSize(18).text(storeName, { align: 'left' });
@@ -416,8 +485,8 @@ router.get('/:orderId/invoice', auth, async (req, res) => {
 
     // Customer details (prefer order.address)
     doc.fontSize(12).text('Bill To:');
-    if (order.address) {
-      const a = order.address;
+    if (orderDoc.address) {
+      const a = orderDoc.address;
       if (a.name) doc.text(a.name);
       if (a.email) doc.text(a.email);
       if (a.phone) doc.text(a.phone);
@@ -543,6 +612,22 @@ router.put('/status/item/:itemId', auth, async (req, res) => {
 
       // All items are cancelled => Cancel order
       if (cart.products.length === items.length) {
+        // notify customer about full order cancellation
+        try {
+          const orderDoc = await Order.findById(orderId).select('address');
+          console.log(orderDoc);
+          if (orderDoc && orderDoc.address) {
+            await googlemail.sendEmail(
+              orderDoc.address.email,
+              'item-cancelled',
+              process.env.CLIENT_URL,
+              { order: orderDoc, item: foundCartProduct }
+            );
+          }
+        } catch (err) {
+          console.error('Email error:', err);
+        }
+
         await Order.deleteOne({ _id: orderId });
         await Cart.deleteOne({ _id: cartId });
 
@@ -553,11 +638,51 @@ router.put('/status/item/:itemId', auth, async (req, res) => {
             } has been cancelled successfully`
         });
       }
+      // send mail to customer about order cancellation of this item
+      try {
+        const orderDoc = await Order.findById(orderId).populate('user');
+        let productDoc = null;
+        try {
+          productDoc = await Product.findById(foundCartProduct.product);
+        } catch (e) {
+          // ignore
+        }
+        if (orderDoc && orderDoc.user && orderDoc.user.email) {
+          await googlemail.sendEmail(
+            orderDoc.user.email,
+            'item-cancelled',
+            process.env.CLIENT_URL,
+            { order: orderDoc, item: { ...foundCartProduct.toObject ? foundCartProduct.toObject() : foundCartProduct, product: productDoc } }
+          );
+        }
+      } catch (err) {
+        console.error('Email error:', err);
+      }
 
       return res.status(200).json({
         success: true,
         message: 'Item has been cancelled successfully!'
       });
+    }
+    // sent mail to customer about item status update
+    try {
+      const orderDoc = await Order.findById(orderId).populate('user');
+      let productDoc = null;
+      try {
+        productDoc = await Product.findById(foundCartProduct.product);
+      } catch (e) {
+        // ignore
+      }
+      if (orderDoc && orderDoc.user && orderDoc.user.email) {
+        await googlemail.sendEmail(
+          orderDoc.user.email,
+          'item-status-update',
+          process.env.CLIENT_URL,
+          { order: orderDoc, item: { ...foundCartProduct.toObject ? foundCartProduct.toObject() : foundCartProduct, product: productDoc }, status }
+        );
+      }
+    } catch (err) {
+      console.error('Email error:', err);
     }
 
     res.status(200).json({

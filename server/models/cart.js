@@ -23,6 +23,18 @@ const CartItemSchema = new Schema({
     type: Number,
     default: 0
   },
+  store: {
+    type: String,
+    default: null
+  },
+  name: {
+    type: String,
+    trim: true
+  },
+  slug: {
+    type: String,
+    slug: 'name'
+  },
   totalTax: {
     type: Number,
     default: 0

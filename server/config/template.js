@@ -36,8 +36,8 @@ exports.merchantWelcome = (host, name) => {
     subject: 'Merchant Registration',
     text:
       `Hi ${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
-      `Your store link ${host}/${name}! Congratulations! Your application for merchant account has been accepted. \n\n` +
-      `It looks like you already have a member account with us. Please sign in with your member credentials and you will be able to see your merchant account.`
+      `Your store link is ${host}/${name}\n\n` +
+      `Please sign in with your login credentials and you will be able to see your store dashboard.`
   };
 
   return message;
@@ -109,8 +109,34 @@ exports.orderConfirmationEmail = order => {
   const message = {
     subject: `Order Confirmation ${order._id}`,
     text:
-      `Hi ${order.user.profile.firstName}! Thank you for your order!. \n\n` +
+      `Hi ${order.address.name}! Thank you for your order!. \n\n` +
       `We've received your order and will contact you as soon as your package is shipped. \n\n`
+  };
+
+  return message;
+};
+
+exports.itemCancellationEmail = (host, { order, item }) => {
+  const itemName = item && (item.name || (item.product && (item.product.name || item.product.title))) || 'an item';
+  const message = {
+    subject: `Item Cancelled - Order ${order._id}`,
+    text:
+      `Hi ${order.address && order.address.name ? order.address.name : ''}!\n\n` +
+      `We wanted to let you know that ${itemName} from your order ${order._id} has been cancelled.\n\n` +
+      `If you have any questions, please contact us.`
+  };
+
+  return message;
+};
+
+exports.itemStatusUpdateEmail = (host, { order, item, status }) => {
+  const itemName = item && (item.name || (item.product && (item.product.name || item.product.title))) || 'an item';
+  const message = {
+    subject: `Item Status Updated - Order ${order._id}`,
+    text:
+      `Hi ${order.address && order.address.name ? order.address.name : ''}!\n\n` +
+      `The status of ${itemName} in your order ${order._id} has been updated to: ${status}.\n\n` +
+      `If you have any questions, please contact us.`
   };
 
   return message;

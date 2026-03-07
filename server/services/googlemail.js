@@ -77,6 +77,14 @@ const prepareTemplate = (type, host, data) => {
             message = template.merchantDeactivateAccount(host, data);
             break;
 
+        case 'item-cancelled':
+            message = template.itemCancellationEmail(host, data);
+            break;
+
+        case 'item-status-update':
+            message = template.itemStatusUpdateEmail(host, data);
+            break;
+
         case 'order-confirmation':
             message = template.orderConfirmationEmail(data);
             break;

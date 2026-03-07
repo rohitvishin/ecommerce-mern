@@ -28,7 +28,12 @@ class List extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.fetchAccountOrders();
+    if (this.props.user.role === ROLES.Admin) {
+      this.props.fetchOrders();
+    } else {
+      this.props.fetchAccountOrders();
+    }
+
   }
 
   handleOrderSearch = e => {
@@ -61,12 +66,7 @@ class List extends React.PureComponent {
     return (
       <div className='order-dashboard'>
         <SubPage
-          title='Your Orders'
-          actionTitle={user.role === ROLES.Admin && 'Customer Orders'}
-          handleAction={() =>
-            user.role === ROLES.Admin &&
-            history.push('/dashboard/orders/customers')
-          }
+          title={user.role === ROLES.Member ? 'My Orders' : 'Customer Orders'}
         >
           <OrderSearch
             onBlur={this.handleOrderSearch}
@@ -88,7 +88,7 @@ class List extends React.PureComponent {
                 label='orders'
                 count={isSearch ? filteredOrders.length : advancedFilters.count}
               />
-              <OrderList orders={filteredOrders} downloadInvoice={this.props.downloadInvoice} />
+              <OrderList orders={filteredOrders} />
             </>
           )}
           {!isLoading && !displayOrders && (

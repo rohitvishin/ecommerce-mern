@@ -14,6 +14,8 @@ router.post('/add', auth, async (req, res) => {
 
     const products = store.caculateItemsSalesTax(items);
 
+    console.log('Products with tax', products);
+    // get product details
     const cart = new Cart({
       user,
       products
@@ -29,7 +31,7 @@ router.post('/add', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });
@@ -43,7 +45,7 @@ router.delete('/delete/:cartId', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });
@@ -60,7 +62,7 @@ router.post('/add/:cartId', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });
@@ -77,7 +79,7 @@ router.delete('/delete/:cartId/:productId', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: error.message || 'Your request could not be processed. Please try again.'
     });
   }
 });

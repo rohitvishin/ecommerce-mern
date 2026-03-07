@@ -19,16 +19,16 @@ const Checkout = ({
     checkoutChange,
     placeOrder,
     cartItems,
-    cartTotal
+    cartTotal,
+    shopName
 }) => {
     const handleSubmit = event => {
-        checkoutFormData.total = cartTotal;
         event.preventDefault();
+        checkoutFormData.total = cartTotal;
+        checkoutFormData.store = shopName;
         console.log('Place Order action dispatched with formData:', checkoutFormData);
         placeOrder();
     };
-
-    console.log('Checkout Rendered with cartItems:', cartItems, 'and cartTotal:', cartTotal);
     return (
         <div className='checkout'>
             <form onSubmit={handleSubmit} noValidate>
@@ -250,8 +250,8 @@ const Checkout = ({
 const mapStateToProps = state => {
     const checkoutState = state?.checkout || {};
     const cartState = state?.cart || {};
-
     return {
+        shopName: state?.shop?.shopName || '',
         checkoutFormData: checkoutState.checkoutFormData,
         formErrors: checkoutState.formErrors || {},
         cartItems: cartState.cartItems || [],

@@ -145,7 +145,11 @@ const Website = () => {
                     {[
                         {
                             title: "Starter",
-                            price: "Free ₹45",
+                            price: (
+                                <>
+                                    Free <span style={{ textDecoration: "line-through", opacity: 0.6 }}>₹49</span>
+                                </>
+                            ),
                             features: [
                                 "Up to 5 products",
                                 "Free SSL",
@@ -159,7 +163,11 @@ const Website = () => {
                         },
                         {
                             title: "Champion",
-                            price: "₹199 (₹299)",
+                            price: (
+                                <>
+                                    ₹199 <span style={{ textDecoration: "line-through", opacity: 0.6 }}>₹299</span>
+                                </>
+                            ),
                             highlight: true,
                             features: [
                                 "Up to 200 products",
