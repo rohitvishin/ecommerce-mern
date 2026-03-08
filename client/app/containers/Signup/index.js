@@ -97,6 +97,7 @@ class Signup extends React.PureComponent {
                 />
               </Col>
               <Col xs='12' md='12'>
+                <p style={{ color: 'red' }}>For safety: Password must be at least 8 characters and include uppercase, lowercase, number, and special character</p>
                 <Input
                   type={'password'}
                   label={'Password'}
@@ -104,6 +105,17 @@ class Signup extends React.PureComponent {
                   name={'password'}
                   placeholder={'Please Enter Your Password'}
                   value={signupFormData.password}
+                  onInputChange={(name, value) => {
+                    signupChange(name, value);
+                  }}
+                />
+                <Input
+                  type={'password'}
+                  label={'Confirm Password'}
+                  error={formErrors['confirmPassword']}
+                  name={'confirmPassword'}
+                  placeholder={'Please Confirm Your Password'}
+                  value={signupFormData.confirmPassword}
                   onInputChange={(name, value) => {
                     signupChange(name, value);
                   }}

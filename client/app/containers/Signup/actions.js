@@ -43,9 +43,10 @@ export const signUp = () => {
     try {
       const rules = {
         email: 'required|email',
-        password: 'required|min:6',
         firstName: 'required',
-        lastName: 'required'
+        lastName: 'required',
+        password: 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).+$/',
+        confirmPassword: 'required|same:password'
       };
 
       const newUser = getState().signup.signupFormData;
@@ -53,10 +54,13 @@ export const signUp = () => {
 
       const { isValid, errors } = allFieldsValidation(newUser, rules, {
         'required.email': 'Email is required.',
-        'required.password': 'Password is required.',
         'required.firstName': 'First Name is required.',
         'required.lastName': 'Last Name is required.',
-
+        'required.confirmPassword': 'Confirm Password is required.',
+        'required.password': 'Password is required.',
+        'regex.password': 'For Strong Password,it must contain uppercase, lowercase, number, and special character.',
+        'min.password': 'Password must be at least 8 characters.',
+        'same.confirmPassword': 'Confirm Password must match Password.'
       });
 
       if (!isValid) {

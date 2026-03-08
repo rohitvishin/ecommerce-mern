@@ -100,34 +100,6 @@ class MerchantSignup extends React.PureComponent {
                 </Col>
               </Row>
               <Row>
-                <Col xs='6' md='6'>
-                  <Input
-                    type={'password'}
-                    label={'Password'}
-                    error={formErrors['password']}
-                    name={'password'}
-                    placeholder={'Please Enter Your Password'}
-                    value={signupFormData.password}
-                    onInputChange={(name, value) => {
-                      merchantSignupChange(name, value);
-                    }}
-                  />
-                </Col>
-                <Col xs='6' md='6'>
-                  <Input
-                    type={'text'}
-                    error={formErrors['storeName']}
-                    label={'Store Name'}
-                    name={'storeName'}
-                    placeholder={'Please Enter Your Store Name'}
-                    value={signupFormData.storeName}
-                    onInputChange={(name, value) => {
-                      merchantSignupChange(name, value);
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row>
                 <Col xs='12' md='12'>
                   <Input
                     type={'text'}
@@ -142,9 +114,52 @@ class MerchantSignup extends React.PureComponent {
                   />
                 </Col>
               </Row>
+              <Row>
+                <Col xs='12' md='12'>
+                  <p style={{ color: 'red' }}>Store Name must be at least 4 characters and without space</p>
+                  <Input
+                    type={'text'}
+                    error={formErrors['storeName']}
+                    label={'Store Name'}
+                    name={'storeName'}
+                    placeholder={'Please Enter Your Store Name'}
+                    value={signupFormData.storeName}
+                    onInputChange={(name, value) => {
+                      merchantSignupChange(name, value);
+                    }}
+                  />
+                </Col>
+              </Row>
               <Row className='mt-3'>
                 <Col xs='12' md={{ size: 6, offset: 3 }} className='text-center'>
                   {/* removed reCAPTCHA */}
+                </Col>
+              </Row>
+              <Row>
+                <Col xs='12' md='12'>
+                  <p style={{ color: 'red' }}>For safety: Password must be at least 8 characters and include uppercase, lowercase, number, and special character</p>
+                  <Input
+                    type={'password'}
+                    label={'Password'}
+                    error={formErrors['password']}
+                    name={'password'}
+                    placeholder={'Please Enter Your Password'}
+                    value={signupFormData.password}
+                    onInputChange={(name, value) => {
+                      merchantSignupChange(name, value);
+                    }}
+                  />
+                  <Input
+                    type={'password'}
+                    label={'Confirm Password'}
+                    error={formErrors['confirmPassword']}
+                    name={'confirmPassword'}
+                    placeholder={'Please Confirm Your Password'}
+                    value={signupFormData.confirmPassword}
+                    onInputChange={(name, value) => {
+                      merchantSignupChange(name, value);
+                    }}
+                  />
                 </Col>
               </Row>
               <Col xs='12' md='12'>
@@ -174,8 +189,8 @@ class MerchantSignup extends React.PureComponent {
               />
             </Col>
           </Row>
-        </form>
-      </div>
+        </form >
+      </div >
     );
   }
 }
