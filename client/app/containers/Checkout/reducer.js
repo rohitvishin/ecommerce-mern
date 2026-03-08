@@ -81,7 +81,7 @@ const checkoutReducer = (state = initialState, action) => {
                     city: '',
                     state: '',
                     country: '',
-                    zipCode: '',
+                    pincode: '',
                     paymentMethod: 'cod',
                     cardNumber: '',
                     expiry: '',
