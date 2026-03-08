@@ -147,7 +147,7 @@ const AddProduct = props => {
               type={'file'}
               error={formErrors['file']}
               name={'image'}
-              label={'file'}
+              label={'file - Max size 2MB'}
               placeholder={'Please Upload Image'}
               value={image}
               onInputChange={(name, value) => {

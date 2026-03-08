@@ -38,6 +38,10 @@ const UserSchema = new Schema({
     type: String,
     default: null
   },
+  ip: {
+    type: String,
+    default: null
+  },
   googleId: {
     type: String
   },
@@ -46,6 +50,15 @@ const UserSchema = new Schema({
   },
   avatar: {
     type: String
+  },
+  plan: {
+    type: String,
+    default: 'free',
+    enum: ['free', 'premium']
+  },
+  planExpires: {
+    type: Date,
+    default: null
   },
   role: {
     type: String,

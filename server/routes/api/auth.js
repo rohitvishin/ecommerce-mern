@@ -18,6 +18,24 @@ const keys = require('../../config/keys');
 const { EMAIL_PROVIDER, JWT_COOKIE } = require('../../constants');
 
 const { secret, tokenLife } = keys.jwt;
+const Logs = require('../../models/Logs');
+const { create } = require('domain');
+
+const createLog = (req, model, action, detail) => {
+  try {
+    const userIdentifier = (req && (req.user && req.user.email)) || (req && req.body && req.body.email) || null;
+    const log = new Logs({
+      user: userIdentifier,
+      model,
+      action,
+      detail: typeof detail === 'string' ? detail : JSON.stringify(detail),
+      updated: new Date()
+    });
+    log.save().catch(() => { });
+  } catch (err) {
+    // swallow logging errors to avoid interfering with API flow
+  }
+};
 
 router.post('/login', strictAuthLimiter, async (req, res) => {
   try {
@@ -35,6 +53,7 @@ router.post('/login', strictAuthLimiter, async (req, res) => {
     const user = await User.findOne({ email });
     const vendor = await Merchant.findOne({ brandName: store });
     if (!user || !vendor) {
+      createLog(req, 'Auth', 'login', `Invalid login attempt: email=${email} store=${store} by IP=${req.ip}`);
       return res
         .status(400)
         .send({ error: 'Invalid user or store url.' });
@@ -65,6 +84,9 @@ router.post('/login', strictAuthLimiter, async (req, res) => {
       throw new Error();
     }
 
+    user.ip = req.ip;
+    user.save();
+
     res.status(200).json({
       success: true,
       token: `Bearer ${token}`,
@@ -77,6 +99,7 @@ router.post('/login', strictAuthLimiter, async (req, res) => {
       }
     });
   } catch (error) {
+    createLog(req, 'Auth', 'login', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -124,13 +147,13 @@ router.post('/register', strictAuthLimiter, async (req, res) => {
         subscribed = true;
       }
     }
-
     const user = new User({
       email,
       password,
       firstName,
       lastName,
-      storeId
+      storeId,
+      ip: req.ip
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -165,6 +188,7 @@ router.post('/register', strictAuthLimiter, async (req, res) => {
       }
     });
   } catch (error) {
+    createLog(req, 'Auth', 'register', `Exception: ${error && error.message} by IP=${req.ip}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -253,6 +277,7 @@ router.post('/reset/:token', async (req, res) => {
         'Password changed successfully. Please login with your new password.'
     });
   } catch (error) {
+    createLog(req, 'Auth', 'resetToken', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -300,6 +325,7 @@ router.post('/reset', auth, async (req, res) => {
         'Password changed successfully. Please login with your new password.'
     });
   } catch (error) {
+    createLog(req, 'Auth', 'resetAuth', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
