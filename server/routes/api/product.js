@@ -20,7 +20,8 @@ const { ROLES } = require('../../constants');
 const brand = require('../../models/brand');
 const googlemail = require('../../services/googlemail');
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
+const upload = multer({ storage, limits: { fileSize: MAX_IMAGE_SIZE } });
 
 router.get(
   '/featured',
@@ -223,6 +224,10 @@ router.post(
       const brand = req.body.brand;
       const store = req.body.store;
       const image = req.file;
+
+      if (image && image.size > MAX_IMAGE_SIZE) {
+        return res.status(400).json({ error: 'Image size must be 2MB or less.' });
+      }
 
       if (!sku) {
         return res.status(400).json({ error: 'You must enter sku.' });

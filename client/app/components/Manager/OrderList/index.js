@@ -61,9 +61,9 @@ const OrderList = props => {
                     )}`}</span>
                   </div>
                   <div className='mb-1'>
-                    <span>Order Total</span>
-                    <span className='order-label'>{` $${order?.totalWithTax ? order?.totalWithTax : 0
-                      }`}</span>
+                    <span>Order Total:</span>
+                    <span className='order-label'>{` ${order?.totalWithTax ? order?.totalWithTax : 0
+                      } INR`}</span>
                   </div>
                 </div>
               </div>

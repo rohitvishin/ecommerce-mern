@@ -4,6 +4,10 @@ const { Schema } = Mongoose;
 
 // Log Schema
 const LogSchema = new Schema({
+    user: {
+        type: String,
+        default: null
+    },
     model: {
         type: String,
         default: null
@@ -12,11 +16,7 @@ const LogSchema = new Schema({
         type: String,
         default: null
     },
-    user: {
-        type: String,
-        default: null
-    },
-    details: {
+    detail: {
         type: String,
         default: null
     },

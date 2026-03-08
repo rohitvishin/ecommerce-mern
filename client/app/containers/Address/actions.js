@@ -60,6 +60,7 @@ export const setAddressLoading = value => {
 };
 
 export const fetchAddresses = () => {
+  console.log('Fetching addresses...');
   return async (dispatch, getState) => {
     try {
       dispatch(setAddressLoading(true));

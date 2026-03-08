@@ -15,6 +15,23 @@ const role = require('../../middleware/role');
 const googlemail = require('../../services/googlemail');
 const keys = require('../../config/keys');
 const { secret, tokenLife } = keys.jwt;
+const Logs = require('../../models/Logs');
+
+const createLog = (req, model, action, detail) => {
+  try {
+    const userIdentifier = (req && (req.user && req.user.email)) || (req && req.body && req.body.email) || null;
+    const log = new Logs({
+      user: userIdentifier,
+      model,
+      action,
+      detail: typeof detail === 'string' ? detail : JSON.stringify(detail),
+      updated: new Date()
+    });
+    log.save().catch(() => { });
+  } catch (err) {
+    // swallow logging errors
+  }
+};
 // add merchant api
 router.post('/add', async (req, res) => {
   try {
@@ -63,6 +80,7 @@ router.post('/add', async (req, res) => {
       merchant: merchantDoc
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'add', `Exception: ${error && error.message}`);
     return res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -90,6 +108,7 @@ router.get('/search', auth, role.check(ROLES.Admin), async (req, res) => {
       merchants
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'search', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -110,6 +129,7 @@ router.get('/find', async (req, res) => {
       merchant
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'find', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -136,6 +156,7 @@ router.get('/', auth, role.check(ROLES.Admin), async (req, res) => {
       count
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'fetchAll', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -162,6 +183,7 @@ router.put('/:id/active', auth, async (req, res) => {
       success: true
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'activate', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -193,6 +215,7 @@ router.put('/approve/:id', auth, async (req, res) => {
       success: true
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'approve', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -217,6 +240,7 @@ router.put('/reject/:id', auth, async (req, res) => {
       success: true
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'reject', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -301,6 +325,7 @@ router.post('/signup', strictAuthLimiter, async (req, res) => {
       success: true
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'signup', `Exception: ${error && error.message} by IP=${req.ip}`);
     res.status(400).json({
       error: error.message || 'Your request could not be processed. Please try again.'
     });
@@ -358,6 +383,7 @@ router.post('/signup/:token', async (req, res) => {
       success: true
     });
   } catch (error) {
+    createLog(req, 'Merchant', 'signupToken', `Exception: ${error && error.message}`);
     res.status(400).json({
       error: error.message || 'Your request could not be processed. Please try again.'
     });
@@ -380,6 +406,7 @@ router.delete(
         merchant
       });
     } catch (error) {
+      createLog(req, 'Merchant', 'delete', `Exception: ${error && error.message}`);
       res.status(400).json({
         error: 'Your request could not be processed. Please try again.'
       });

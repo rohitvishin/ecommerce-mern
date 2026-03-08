@@ -13,7 +13,23 @@ const googlemail = require('../../services/googlemail');
 const store = require('../../utils/store');
 const { ROLES, CART_ITEM_STATUS } = require('../../constants');
 const PDFDocument = require('pdfkit');
+const Logs = require('../../models/Logs');
 
+const createLog = (req, model, action, detail) => {
+  try {
+    const userIdentifier = (req && (req.user && req.user.email)) || (req && req.body && req.body.email) || null;
+    const log = new Logs({
+      user: userIdentifier,
+      model,
+      action,
+      detail: typeof detail === 'string' ? detail : JSON.stringify(detail),
+      updated: new Date()
+    });
+    log.save().catch(() => { });
+  } catch (err) {
+    // swallow logging errors to avoid interfering with API flow
+  }
+};
 router.post('/add', auth, async (req, res) => {
   try {
     const cart = req.body.cartId;
@@ -142,6 +158,7 @@ router.post('/checkout', auth, async (req, res) => {
       order: order
     });
   } catch (error) {
+    createLog(req, 'Order', 'Checkout Error', { error: error.message, stack: error.stack });
     console.error('Checkout error:', error);
     res.status(500).json({
       error: error.message || 'Your order could not be processed. Please try again.'

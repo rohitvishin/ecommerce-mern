@@ -79,7 +79,6 @@ const validateCheckout = formData => {
         if (!formData.expiry) errors.expiry = 'Expiry is required.';
         if (!formData.cvv) errors.cvv = 'CVV is required.';
     }
-
     return errors;
 };
 
@@ -107,6 +106,7 @@ export const placeOrder = () => async (dispatch, getState) => {
         });
 
     } catch (error) {
+        console.error('Error placing order:', error);
         dispatch(
             setCheckoutFormErrors({
                 general: 'Unable to place order. Please try again.'
@@ -117,6 +117,34 @@ export const placeOrder = () => async (dispatch, getState) => {
         dispatch(push('/dashboard/orders'));
     }
 };
+export const handleCheckoutLogin = () => {
+    const merchant = localStorage.getItem('store');
+    return (dispatch, getState) => {
+        const successfulOptions = {
+            title: `Please Login to proceed to checkout`,
+            position: 'tr',
+            autoDismiss: 1
+        };
+
+        dispatch(toggleCart());
+        dispatch(push(`/${merchant}/login`));
+        dispatch(success(successfulOptions));
+    };
+};
+
+export const handleShopping = () => {
+    const merchant = localStorage.getItem('store');
+    return (dispatch, getState) => {
+        dispatch(push(`/${merchant}/`));
+        dispatch(toggleCart());
+    };
+};
+export const handleCheckout = () => {
+    return (dispatch, getState) => {
+        dispatch(toggleCart());
+        dispatch(push('/checkout'));
+    };
+}
 
 export default {
     checkoutChange,
@@ -125,5 +153,8 @@ export default {
     setCheckoutLoading,
     setOrderSummary,
     setCartItems,
-    placeOrder
+    placeOrder,
+    handleCheckout,
+    handleShopping,
+    handleCheckoutLogin
 };

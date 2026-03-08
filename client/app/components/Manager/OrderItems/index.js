@@ -114,7 +114,7 @@ const OrderItems = props => {
                           </Link>
                           <div className='d-flex align-items-center justify-content-between'>
                             <span className='price'>
-                              ${item.purchasePrice || item.product.price}
+                              {item.purchasePrice || item.product.price}
                             </span>
                           </div>
                         </>
@@ -133,7 +133,7 @@ const OrderItems = props => {
                       </p>
                       <p>
                         Total Price
-                        <span className='order-label'>{` $${item.totalPrice}`}</span>
+                        <span className='order-label'>{` ${item.totalPrice}`}</span>
                       </p>
                     </div>
                   </div>
@@ -151,7 +151,7 @@ const OrderItems = props => {
                   </div>
 
                   <div className='text-center'>
-                    <p className='order-label'>{` $${item.totalPrice}`}</p>
+                    <p className='order-label'>{` ${item.totalPrice} INR`}</p>
 
                     <p>Total Price</p>
                   </div>
