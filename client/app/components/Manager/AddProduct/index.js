@@ -105,7 +105,7 @@ const AddProduct = props => {
             <Input
               type={'number'}
               error={formErrors['price']}
-              label={'Price'}
+              label={'Price (Rs)'}
               name={'price'}
               min={1}
               placeholder={'Product Price'}

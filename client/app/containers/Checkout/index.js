@@ -20,16 +20,13 @@ class Checkout extends React.PureComponent {
 
     render() {
         const { checkoutFormData, formErrors, cartItems, cartTotal, shopName, addresses, checkoutChange } = this.props;
+        console.log(formErrors);
+        checkoutFormData.store = shopName; // Ensure store name is included in checkout data
+        checkoutFormData.total = cartTotal; // Ensure total is included in checkout data
         const handleSubmit = event => {
             event.preventDefault();
-            const { checkoutFormData, cartTotal, shopName, placeOrder } = this.props;
-            const orderData = {
-                ...checkoutFormData,
-                total: cartTotal,
-                store: shopName
-            };
-            console.log('Place Order action dispatched with formData:', orderData);
-            placeOrder(orderData);
+            const { checkoutFormData, placeOrder } = this.props;
+            placeOrder(checkoutFormData);
         };
         return (
             <div className='checkout'>
@@ -255,7 +252,7 @@ class Checkout extends React.PureComponent {
                                         >
                                             <p>Product: {item.name}</p>
                                             <p>Qty: {item.quantity}</p>
-                                            <p>Sub Total: ${item.price}</p>
+                                            <p>Sub Total: {item.price}</p>
                                         </div>
                                     ))
                                 ) : (
@@ -263,7 +260,7 @@ class Checkout extends React.PureComponent {
                                 )}
 
                                 <hr />
-                                <h4>Total: ${cartTotal}</h4>
+                                <h4>Total: {cartTotal} INR </h4>
                             </aside>
                         </Col>
                     </Row>

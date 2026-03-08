@@ -77,7 +77,10 @@ const mapStateToProps = state => {
     isCartOpen: state.navigation.isCartOpen,
     cartItems: state.cart.cartItems,
     cartTotal: state.cart.cartTotal,
-    authenticated: state.authentication.authenticated
+    authenticated: state.authentication.authenticated,
+    handleCheckoutLogin: state.cart.handleCheckoutLogin,
+    handleShopping: state.cart.handleShopping,
+    handleCheckout: state.cart.handleCheckout
   };
 };
 
