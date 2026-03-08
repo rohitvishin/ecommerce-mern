@@ -24,7 +24,7 @@ const initialState = {
     city: '',
     state: '',
     country: '',
-    zipCode: '',
+    pincode: '',
     isDefault: false
   },
   address: {
@@ -33,7 +33,7 @@ const initialState = {
     city: '',
     state: '',
     country: '',
-    zipCode: '',
+    pincode: '',
     isDefault: false
   },
   formErrors: {},
@@ -101,7 +101,7 @@ const addressReducer = (state = initialState, action) => {
           city: '',
           state: '',
           country: '',
-          zipCode: '',
+          pincode: '',
           isDefault: false
         },
         formErrors: {}

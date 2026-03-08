@@ -147,7 +147,7 @@ const Website = () => {
                             title: "Starter",
                             price: (
                                 <>
-                                    Free <span style={{ textDecoration: "line-through", opacity: 0.6 }}>₹49</span>
+                                    Free <span style={{ textDecoration: "line-through", opacity: 0.6 }}>₹99</span>
                                 </>
                             ),
                             features: [
