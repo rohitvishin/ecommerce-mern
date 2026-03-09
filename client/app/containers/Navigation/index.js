@@ -38,20 +38,6 @@ import { ROLES } from '../../constants';
 
 
 class Navigation extends React.PureComponent {
-  componentDidMount() {
-    this.props.fetchStoreBrands();
-    this.props.fetchStoreCategories();
-  }
-
-  toggleBrand() {
-    this.props.fetchStoreBrands();
-    this.props.toggleBrand();
-  }
-
-  toggleMenu() {
-    this.props.fetchStoreCategories();
-    this.props.toggleMenu();
-  }
 
   getSuggestionValue(suggestion) {
     return suggestion.name;
@@ -112,19 +98,13 @@ class Navigation extends React.PureComponent {
       authenticated,
       user,
       cartItems,
-      brands,
-      categories,
       signOut,
       isMenuOpen,
       isCartOpen,
-      isBrandOpen,
       toggleCart,
       toggleMenu,
       searchValue,
-      suggestions,
       onSearch,
-      onSuggestionsFetchRequested,
-      onSuggestionsClearRequested,
       shopName,
       shopNumber
     } = this.props;
@@ -279,8 +259,6 @@ const mapStateToProps = state => {
     isCartOpen: state.navigation.isCartOpen,
     isBrandOpen: state.navigation.isBrandOpen,
     cartItems: state.cart.cartItems,
-    brands: state.brand.storeBrands,
-    categories: state.category.storeCategories,
     authenticated: state.authentication.authenticated,
     user: state.account.user,
     searchValue: state.navigation.searchValue,
