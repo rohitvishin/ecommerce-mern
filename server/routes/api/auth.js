@@ -18,7 +18,7 @@ const keys = require('../../config/keys');
 const { EMAIL_PROVIDER, JWT_COOKIE } = require('../../constants');
 
 const { secret, tokenLife } = keys.jwt;
-const Logs = require('../../models/Logs');
+const Logs = require('../../models/logs');
 const { create } = require('domain');
 
 const createLog = (req, model, action, detail) => {

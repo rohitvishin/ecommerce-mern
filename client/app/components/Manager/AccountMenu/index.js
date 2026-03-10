@@ -7,9 +7,10 @@
 import React from 'react';
 
 import { NavLink } from 'react-router-dom';
-import { Collapse, Navbar } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 import Button from '../../Common/Button';
+import { CloseIcon } from '../../Common/Icon';
 
 const AccountMenu = props => {
   const { user, isMenuOpen, links, toggleMenu } = props;
@@ -23,38 +24,50 @@ const AccountMenu = props => {
     return link.provider.includes(userProvider);
   };
 
+  const handleLinkClick = () => {
+    if (typeof toggleMenu === 'function') toggleMenu();
+  };
+
   return (
     <div className='panel-sidebar'>
-      <Button
-        text='Dashboard Menu'
-        className={`${isMenuOpen ? 'menu-panel' : 'menu-panel collapse'}`}
-        ariaExpanded={isMenuOpen ? 'true' : 'false'}
-        // ariaLabel={isMenuOpen ? 'dashboard menu expanded' : 'dashboard menu collapse'}
-        onClick={toggleMenu}
-      />
-      <h3 className='panel-title'>Account</h3>
-      <Navbar color='light' light expand='md'>
-        <Collapse isOpen={isMenuOpen} navbar>
-          <ul className='panel-links'>
-            {links.map((link, index) => {
-              const PREFIX = link.prefix ? link.prefix : '';
-              const isProviderAllowed = getAllowedProvider(link);
-              if (!isProviderAllowed) return;
-              return (
-                <li key={index}>
-                  <NavLink
-                    to={PREFIX + link.to}
-                    activeClassName='active-link'
-                    exact
-                  >
-                    {link.name}
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
-        </Collapse>
-      </Navbar>
+      <div className='menu-header'>
+        {isMenuOpen && (
+          <Button
+            borderless
+            variant='empty'
+            ariaLabel='close the menu'
+            icon={<CloseIcon />}
+            onClick={toggleMenu}
+          />
+        )}
+      </div>
+
+      <div className='menu-body'>
+        <Container>
+          <h3 className='panel-title'>Account</h3>
+          <nav role='navigation'>
+            <ul className='menu-list panel-links'>
+              {links.map((link, index) => {
+                const PREFIX = link.prefix ? link.prefix : '';
+                const isProviderAllowed = getAllowedProvider(link);
+                if (!isProviderAllowed) return null;
+                return (
+                  <li key={index} className='menu-item'>
+                    <NavLink
+                      onClick={handleLinkClick}
+                      to={PREFIX + link.to}
+                      activeClassName='active-link'
+                      exact
+                    >
+                      {link.name}
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </Container>
+      </div>
     </div>
   );
 };
