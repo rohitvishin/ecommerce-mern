@@ -12,6 +12,7 @@ import { Row, Col } from 'reactstrap';
 import actions from '../../actions';
 import Input from '../../components/Common/Input';
 import Button from '../../components/Common/Button';
+import Checkbox from '../../components/Common/Checkbox';
 
 class MerchantSignup extends React.PureComponent {
   state = {};
@@ -162,6 +163,18 @@ class MerchantSignup extends React.PureComponent {
                   />
                 </Col>
               </Row>
+              <Col xs='12' md='12' className='flex items-center mt-3'>
+                {formErrors['isAgreedToTerms'] ? <p style={{ color: 'red', marginRight: '10px' }}>{formErrors['isAgreedToTerms']}</p> : null}
+                <Checkbox
+                  id={'default'}
+                  label={'I agree to the'}
+                  value={true}
+                  name={'isAgreedToTerms'}
+                  checked={signupFormData.isAgreedToTerms}
+                  onChange={(name, value) => merchantSignupChange(name, value)}
+                />
+                <a href='/merchant-agreement' target='_blank' rel='noopener noreferrer'>Terms and Conditions</a>
+              </Col>
               <Col xs='12' md='12'>
                 <Button
                   className='mt-3 mr-3'
