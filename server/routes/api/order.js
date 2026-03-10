@@ -13,7 +13,7 @@ const googlemail = require('../../services/googlemail');
 const store = require('../../utils/store');
 const { ROLES, CART_ITEM_STATUS } = require('../../constants');
 const PDFDocument = require('pdfkit');
-const Logs = require('../../models/Logs');
+const Logs = require('../../models/logs');
 
 const createLog = (req, model, action, detail) => {
   try {

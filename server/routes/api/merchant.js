@@ -15,7 +15,7 @@ const role = require('../../middleware/role');
 const googlemail = require('../../services/googlemail');
 const keys = require('../../config/keys');
 const { secret, tokenLife } = keys.jwt;
-const Logs = require('../../models/Logs');
+const Logs = require('../../models/logs');
 
 const createLog = (req, model, action, detail) => {
   try {
