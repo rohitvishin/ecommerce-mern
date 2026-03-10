@@ -273,6 +273,7 @@ export const merchantRegister = () => {
         storeName: 'required',
         confirmPassword: 'required|same:password',
         password: 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).+$/',
+        isAgreedToTerms: 'required'
       };
 
       const merchant = getState().merchant.signupFormData;
@@ -287,7 +288,8 @@ export const merchantRegister = () => {
         'required.storeName': 'Store Name is required.',
         'min.password': 'Password must be at least 8 characters.',
         'regex.password': 'For Strong Password, it must contain uppercase, lowercase, number, and special character.',
-        'same.confirmPassword': 'Confirm Password must match Password.'
+        'same.confirmPassword': 'Confirm Password must match Password.',
+        'required.isAgreedToTerms': 'You must agree to the Terms and Conditions.'
       });
 
       if (!isValid) {
