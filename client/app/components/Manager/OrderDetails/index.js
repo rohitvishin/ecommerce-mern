@@ -28,6 +28,7 @@ const OrderDetails = props => {
             user={user}
             updateOrderItemStatus={updateOrderItemStatus}
             downloadInvoice={downloadInvoice}
+            cancelOrder={cancelOrder}
           />
         </Col>
         <Col xs='12' lg='4' className='mt-5 mt-lg-0'>

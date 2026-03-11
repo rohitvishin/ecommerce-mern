@@ -21,7 +21,7 @@ import {
 import { clearCart, getCartId } from '../Cart/actions';
 import { toggleCart } from '../Navigation/actions';
 import handleError from '../../utils/error';
-import { API_URL } from '../../constants';
+import { API_URL, CART_ID } from '../../constants';
 
 export const updateOrderStatus = value => {
   return {
@@ -222,7 +222,8 @@ export const updateOrderItemStatus = (itemId, status) => {
 export const addOrder = () => {
   return async (dispatch, getState) => {
     try {
-      const cartId = localStorage.getItem('cart_id');
+      const cartId = localStorage.getItem(CART_ID);
+      console.log('Placing order with cart ID:', cartId);
       const total = getState().cart.cartTotal;
 
       if (cartId) {
@@ -231,6 +232,8 @@ export const addOrder = () => {
           total
         });
 
+        localStorage.removeItem(CART_ID);
+        console.log('Order placed successfully, cart ID removed:', cartId);
         dispatch(push(`/order/success/${response.data.order._id}`));
         dispatch(clearCart());
       }

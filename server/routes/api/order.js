@@ -114,8 +114,8 @@ router.post('/checkout', auth, async (req, res) => {
       return res.status(400).json({ error: 'Invalid order total.' });
     }
 
-    // Get user's cart
-    const cart = await Cart.findOne({ user: userId });
+    // Get user's recent cart
+    const cart = await Cart.findOne({ user: userId }).sort({ created: -1 });
     if (!cart || cart.products.length === 0) {
       return res.status(400).json({ error: 'Your cart is empty.' });
     }

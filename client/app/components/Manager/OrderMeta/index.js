@@ -14,17 +14,7 @@ import Button from '../../Common/Button';
 import { ArrowBackIcon } from '../../Common/Icon';
 
 const OrderMeta = props => {
-  const { order, cancelOrder, onBack } = props;
-
-  const renderMetaAction = () => {
-    const isNotDelivered =
-      order.products.filter(i => i.status === CART_ITEM_STATUS.Delivered)
-        .length < 1;
-
-    if (isNotDelivered) {
-      return <Button size='sm' text='Cancel Order' onClick={cancelOrder} />;
-    }
-  };
+  const { order, onBack } = props;
 
   return (
     <div className='order-meta'>
@@ -59,9 +49,6 @@ const OrderMeta = props => {
               )}`}</span>
             </Col>
           </Row>
-        </Col>
-        <Col xs='12' md='4' className='text-left text-md-right'>
-          {renderMetaAction()}
         </Col>
       </Row>
       <hr />
