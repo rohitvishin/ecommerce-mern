@@ -31,6 +31,7 @@ import * as order from './containers/Order/actions';
 import * as review from './containers/Review/actions';
 import * as wishlist from './containers/WishList/actions';
 import * as checkout from './containers/Checkout/actions';
+import * as kyc from './containers/Kyc/actions';
 
 export default function mapDispatchToProps(dispatch) {
   return bindActionCreators(
@@ -59,6 +60,7 @@ export default function mapDispatchToProps(dispatch) {
       ...order,
       ...review,
       ...wishlist,
+      ...kyc,
       ...checkout
     },
     dispatch

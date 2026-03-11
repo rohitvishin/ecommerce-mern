@@ -285,6 +285,7 @@ router.post('/signup', strictAuthLimiter, async (req, res) => {
       password,
       firstName,
       lastName,
+      phoneNumber: phone,
       storeId: shopName
     });
 

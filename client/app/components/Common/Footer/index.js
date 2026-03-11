@@ -14,11 +14,12 @@ import Newsletter from '../../../containers/Newsletter';
 const Footer = () => {
   const infoLinks = [
     { id: 0, name: 'Contact Us', to: '/contact' },
-    { id: 1, name: 'Privacy Policy', to: '/privacy-policy' },
-    { id: 2, name: 'Terms and Conditions', to: '/terms-and-conditions' },
-    { id: 3, name: 'Return & Refund Policy', to: '/return-refund-policy' },
-    { id: 4, name: 'Merchant Agreement', to: '/merchant-agreement' },
-    { id: 5, name: 'Shipping Policy', to: '/shipping-policy' }
+    { id: 1, name: 'About Us', to: '/about' },
+    { id: 2, name: 'Privacy Policy', to: '/privacy-policy' },
+    { id: 3, name: 'Terms and Conditions', to: '/terms-and-conditions' },
+    { id: 4, name: 'Return & Refund Policy', to: '/return-refund-policy' },
+    { id: 5, name: 'Merchant Agreement', to: '/merchant-agreement' },
+    { id: 6, name: 'Shipping Policy', to: '/shipping-policy' }
   ];
 
   const footerBusinessLinks = (

@@ -78,6 +78,11 @@
       ]
     },
     {
+      "to": "/kyc",
+      "name": "KYC",
+      "prefix": "/dashboard"
+    },
+    {
       "to": "/address",
       "name": "Address",
       "prefix": "/dashboard"

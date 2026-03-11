@@ -25,7 +25,8 @@ const AccountMenu = props => {
   };
 
   const handleLinkClick = () => {
-    if (typeof toggleMenu === 'function') toggleMenu();
+    // Only toggle the drawer when it's currently open (mobile drawer behavior).
+    if (typeof toggleMenu === 'function' && isMenuOpen) toggleMenu();
   };
 
   return (

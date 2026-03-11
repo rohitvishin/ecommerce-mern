@@ -17,6 +17,7 @@ import AccountSecurity from '../../../containers/AccountSecurity';
 import Address from '../../../containers/Address';
 import Product from '../../../containers/Product';
 import Brand from '../../../containers/Brand';
+import Kyc from '../../../containers/Kyc';
 import Order from '../../../containers/Order';
 import Wishlist from '../../../containers/WishList';
 import Review from '../../../containers/Review';
@@ -29,7 +30,7 @@ const Merchant = props => {
     <div className='merchant'>
       <Row>
         <Col xs='12' md='5' xl='3'>
-          <div onClick={toggleMenu} style={{ alignItems: 'center', display: 'flex' }}>
+          <div className='d-md-none' onClick={toggleMenu} style={{ alignItems: 'center', display: 'flex' }}>
             <BarsIcon />
             <Button
               borderless
@@ -39,12 +40,17 @@ const Merchant = props => {
             />
           </div>
 
+          {/* Desktop: fixed sidebar like Admin */}
+          <div className='d-none d-md-block'>
+            <AccountMenu {...props} />
+          </div>
 
         </Col>
         <Col xs='12' md='7' xl='9'>
           <div className='panel-body'>
             <Switch>
               <Route exact path='/dashboard' component={Account} />
+              <Route exact path='/dashboard/kyc' component={Kyc} />
               <Route path='/dashboard/security' component={AccountSecurity} />
               <Route path='/dashboard/address' component={Address} />
               <Route path='/dashboard/product' component={Product} />
