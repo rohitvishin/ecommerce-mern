@@ -1,3 +1,4 @@
+const e = require('express');
 const Mongoose = require('mongoose');
 
 const { Schema } = Mongoose;
@@ -42,7 +43,8 @@ const KYCSchema = new Schema({
     },
     status: {
         type: String,
-        default: null
+        enum: ['Waiting Approval', 'Approved', 'Rejected'],
+        default: 'Waiting Approval'
     },
     updated: Date,
     created: {

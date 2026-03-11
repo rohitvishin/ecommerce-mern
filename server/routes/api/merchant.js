@@ -3,12 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 // Bring in Models & Helpers
 const { MERCHANT_STATUS, ROLES } = require('../../constants');
 const { authLimiter, strictAuthLimiter } = require('../../middleware/rateLimiter');
 const Merchant = require('../../models/merchant');
 const User = require('../../models/user');
 const Brand = require('../../models/brand');
+const KYC = require('../../models/kyc');
 const auth = require('../../middleware/auth');
 const role = require('../../middleware/role');
 // const mailgun = require('../../services/mailgun');
@@ -16,6 +18,11 @@ const googlemail = require('../../services/googlemail');
 const keys = require('../../config/keys');
 const { secret, tokenLife } = keys.jwt;
 const Logs = require('../../models/logs');
+const { s3Upload } = require('../../utils/storage');
+
+const storage = multer.memoryStorage();
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const upload = multer({ storage, limits: { fileSize: MAX_FILE_SIZE } });
 
 const createLog = (req, model, action, detail) => {
   try {
@@ -408,6 +415,88 @@ router.delete(
       });
     } catch (error) {
       createLog(req, 'Merchant', 'delete', `Exception: ${error && error.message}`);
+      res.status(400).json({
+        error: 'Your request could not be processed. Please try again.'
+      });
+    }
+  }
+);
+
+// fetch kyc for current merchant
+router.get('/kyc/me', auth, role.check(ROLES.Merchant), async (req, res) => {
+  try {
+    const kyc = await KYC.findOne({ user: req.user._id });
+
+    res.status(200).json({
+      kyc: kyc || null
+    });
+  } catch (error) {
+    createLog(req, 'KYC', 'fetchKyc', `Exception: ${error && error.message}`);
+    res.status(400).json({
+      error: 'Your request could not be processed. Please try again.'
+    });
+  }
+});
+
+// submit or update kyc for current merchant
+router.post(
+  '/kyc',
+  auth,
+  role.check(ROLES.Merchant),
+  upload.fields([
+    { name: 'aadharPhoto', maxCount: 1 },
+    { name: 'panPhoto', maxCount: 1 },
+    { name: 'cancelCheque', maxCount: 1 }
+  ]),
+  async (req, res) => {
+    try {
+      const {
+        aadharNumber,
+        panNumber,
+        bankName,
+        accountNumber,
+        ifscCode
+      } = req.body;
+
+      const update = {
+        aadharNumber,
+        panNumber,
+        bankName,
+        accountNumber,
+        ifscCode,
+        status: 'Waiting Approval',
+        updated: new Date()
+      };
+
+      // Handle file uploads
+      if (req.files) {
+        if (req.files.aadharPhoto && req.files.aadharPhoto[0]) {
+          const { imageUrl } = await s3Upload(req.files.aadharPhoto[0]);
+          update.aadharPhoto = imageUrl;
+        }
+        if (req.files.panPhoto && req.files.panPhoto[0]) {
+          const { imageUrl } = await s3Upload(req.files.panPhoto[0]);
+          update.panPhoto = imageUrl;
+        }
+        if (req.files.cancelCheque && req.files.cancelCheque[0]) {
+          const { imageUrl } = await s3Upload(req.files.cancelCheque[0]);
+          update.cancelCheque = imageUrl;
+        }
+      }
+
+      const kyc = await KYC.findOneAndUpdate(
+        { user: req.user._id },
+        update,
+        { new: true, upsert: true }
+      );
+
+      res.status(200).json({
+        success: true,
+        message: 'KYC has been submitted successfully.',
+        kyc
+      });
+    } catch (error) {
+      createLog(req, 'KYC', 'submitKyc', `Exception: ${error && error.message}`);
       res.status(400).json({
         error: 'Your request could not be processed. Please try again.'
       });

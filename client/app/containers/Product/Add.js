@@ -16,6 +16,7 @@ import SubPage from '../../components/Manager/SubPage';
 class Add extends React.PureComponent {
   componentDidMount() {
     this.props.fetchBrandsSelect();
+    this.props.fetchKyc();
   }
 
   render() {
@@ -26,7 +27,8 @@ class Add extends React.PureComponent {
       formErrors,
       brands,
       productChange,
-      addProduct
+      addProduct,
+      kyc
     } = this.props;
 
     return (
@@ -42,6 +44,7 @@ class Add extends React.PureComponent {
           brands={brands}
           productChange={productChange}
           addProduct={addProduct}
+          kyc={kyc}
         />
       </SubPage>
     );
@@ -53,7 +56,8 @@ const mapStateToProps = state => {
     user: state.account.user,
     productFormData: state.product.productFormData,
     formErrors: state.product.formErrors,
-    brands: state.brand.brandsSelect
+    brands: state.brand.brandsSelect,
+    kyc: state.kyc.kyc
   };
 };
 

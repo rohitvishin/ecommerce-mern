@@ -43,7 +43,7 @@ export const fetchKyc = () => {
     return async (dispatch, getState) => {
         try {
             dispatch(setKycLoading(true));
-            const response = await axios.get(`${API_URL}/kyc/me`);
+            const response = await axios.get(`${API_URL}/merchant/kyc/me`);
 
             dispatch({ type: FETCH_KYC, payload: response.data.kyc });
         } catch (error) {
@@ -66,7 +66,7 @@ export const submitKyc = () => {
                 }
             });
 
-            const response = await axios.post(`${API_URL}/kyc`, form, {
+            const response = await axios.post(`${API_URL}/merchant/kyc`, form, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -77,6 +77,7 @@ export const submitKyc = () => {
             };
 
             dispatch({ type: FETCH_KYC, payload: response.data.kyc });
+            dispatch({ type: CLEAR_KYC });
 
             dispatch(success(successfulOptions));
         } catch (error) {
