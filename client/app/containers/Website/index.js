@@ -24,7 +24,7 @@ const Website = () => {
 
                 {/* HERO */}
                 <Row className="justify-content-center mb-5">
-                    <Col xs="12" lg="10">
+                    <Col xs="12" lg="12">
                         <div
                             className="rounded-4 p-5 text-center"
                             style={{
@@ -66,7 +66,26 @@ const Website = () => {
                         </div>
                     </Col>
                 </Row>
+                {/* OUR MISSION */}
+                <Row className="justify-content-center mb-5">
+                    <Col xs="12" lg="12">
+                        <Col xs="12" className="text-center mb-4">
+                            <h2 className="fw-bold">Our Mission</h2>
+                        </Col>
+                        <div
+                            className="rounded-4 p-5 text-center"
+                            style={{
+                                background: "#ffffff",
+                                border: "1px solid #eceef5"
+                            }}
+                        >
 
+                            <p className="text-muted mb-0 fs-5">
+                                At zostore, our mission is to empower entrepreneurs to build and grow their online businesses with ease and confidence. We believe that selling online should be simple, distraction-free, and rewarding — without the headaches of technical setup or juggling multiple tools. Our platform is designed to provide a seamless, all-in-one solution that simplifies technical complexity, payments, inventory, and order management, so you can focus on what truly matters: connecting with your customers and growing your business. Whether you're just starting out or looking to scale, we're here to support your journey every step of the way.
+                            </p>
+                        </div>
+                    </Col>
+                </Row>
                 {/* WHY CHOOSE US */}
                 <Row className="mb-5">
                     <Col xs="12" className="text-center mb-4">
@@ -235,7 +254,7 @@ const Website = () => {
 
                 {/* FAQ */}
                 <Row>
-                    <Col xs="12" lg="8" className="mx-auto">
+                    <Col xs="12" lg="6" className="mx-auto mb-4">
                         <div
                             className="rounded-4 p-5"
                             style={{

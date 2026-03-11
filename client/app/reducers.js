@@ -34,6 +34,7 @@ import orderReducer from './containers/Order/reducer';
 import reviewReducer from './containers/Review/reducer';
 import wishListReducer from './containers/WishList/reducer';
 import checkoutReducer from './containers/Checkout/reducer';
+import kycReducer from './containers/Kyc/reducer';
 
 const createReducer = history =>
   combineReducers({
@@ -63,6 +64,7 @@ const createReducer = history =>
     order: orderReducer,
     review: reviewReducer,
     wishlist: wishListReducer,
+    kyc: kycReducer,
     checkout: checkoutReducer
   });
 

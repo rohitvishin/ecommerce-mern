@@ -172,7 +172,7 @@ class Navigation extends React.PureComponent {
               lg={{ size: 6, order: 3 }}
             >
               <Navbar color='light' light expand='md' className='mt-1 mt-md-0'>
-                {user.role !== ROLES.Admin && user.role !== ROLES.Merchant ? (
+                {user.role !== ROLES.Admin && user.role !== ROLES.Merchant && pathName !== 'signup' ? (
                   <CartIcon className="desktop-display" cartItems={cartItems} onClick={toggleCart} />
                 ) : ''}
                 <Nav navbar>

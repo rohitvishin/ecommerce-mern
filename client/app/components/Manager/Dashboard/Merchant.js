@@ -50,7 +50,7 @@ const Merchant = props => {
           <div className='panel-body'>
             <Switch>
               <Route exact path='/dashboard' component={Account} />
-              <Route exact path='/kyc' component={Kyc} />
+              <Route exact path='/dashboard/kyc' component={Kyc} />
               <Route path='/dashboard/security' component={AccountSecurity} />
               <Route path='/dashboard/address' component={Address} />
               <Route path='/dashboard/product' component={Product} />

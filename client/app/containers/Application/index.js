@@ -32,6 +32,7 @@ import Contact from '../Contact';
 import OrderSuccess from '../OrderSuccess';
 import OrderPage from '../OrderPage';
 import AuthSuccess from '../AuthSuccess';
+import Aboutus from '../Policy/About';
 import PrivacyPolicy from '../Policy/Privacy';
 import TermsAndConditions from '../Policy/Terms';
 import ShippingPolicy from '../Policy/Shipping';
@@ -89,6 +90,7 @@ class Application extends React.PureComponent {
               <div className='wrapper'>
                 <Switch>
                   {/* policy route */}
+                  <Route path='/about' component={Aboutus} />
                   <Route path='/privacy-policy' component={PrivacyPolicy} />
                   <Route path='/terms-and-conditions' component={TermsAndConditions} />
                   <Route path='/shipping-policy' component={ShippingPolicy} />
