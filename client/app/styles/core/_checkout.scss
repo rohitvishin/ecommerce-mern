@@ -1,3 +1,17 @@
+.checkout {
+
+  input[type='text'],
+  input[type='password'] {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
 .easy-checkout {
   border-top: $border-default;
 
