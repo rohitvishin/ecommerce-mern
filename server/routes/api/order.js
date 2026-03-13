@@ -14,6 +14,7 @@ const store = require('../../utils/store');
 const { ROLES, CART_ITEM_STATUS } = require('../../constants');
 const PDFDocument = require('pdfkit');
 const Logs = require('../../models/logs');
+const merchant = require('../../models/merchant');
 
 const createLog = (req, model, action, detail) => {
   try {
@@ -631,7 +632,7 @@ router.put('/status/item/:itemId', auth, async (req, res) => {
       if (cart.products.length === items.length) {
         // notify customer about full order cancellation
         try {
-          const orderDoc = await Order.findById(orderId).select('address');
+          const orderDoc = await Order.findById(orderId).select('address', 'store');
           console.log(orderDoc);
           if (orderDoc && orderDoc.address) {
             await googlemail.sendEmail(
@@ -640,7 +641,20 @@ router.put('/status/item/:itemId', auth, async (req, res) => {
               process.env.CLIENT_URL,
               { order: orderDoc, item: foundCartProduct }
             );
+            merchant.findOne({ brandName: orderDoc.store }).then(merchantDoc => {
+              if (merchantDoc && merchantDoc.email) {
+                googlemail.sendEmail(
+                  merchantDoc.email,
+                  'item-cancelled',
+                  process.env.CLIENT_URL,
+                  { order: { _id: orderDoc._id, address: { name: orderDoc.store } }, item: foundCartProduct }
+                );
+              }
+            }).catch(err => {
+              console.error('Email error:', err);
+            });
           }
+
         } catch (err) {
           console.error('Email error:', err);
         }
