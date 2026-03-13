@@ -168,7 +168,7 @@ export const getCartId = () => {
       // create cart id if there is no one
       if (!cartId) {
         const response = await axios.post(`${API_URL}/cart/add`, { products });
-
+        console.log('Cart ID response', response.data.cartId);
         dispatch(setCartId(response.data.cartId));
       }
     } catch (error) {

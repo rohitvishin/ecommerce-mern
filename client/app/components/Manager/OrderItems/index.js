@@ -14,7 +14,7 @@ import Button from '../../Common/Button';
 import DropdownConfirm from '../../Common/DropdownConfirm';
 
 const OrderItems = props => {
-  const { order, user, updateOrderItemStatus, downloadInvoice } = props;
+  const { order, user, updateOrderItemStatus, downloadInvoice, cancelOrder } = props;
 
   const renderPopoverContent = item => {
     const statuses = Object.values(CART_ITEM_STATUS);
@@ -66,7 +66,7 @@ const OrderItems = props => {
                 text='Confirm Cancel'
                 role='menuitem'
                 className='cancel-order-btn'
-                onClick={() => updateOrderItemStatus(item._id, 'Cancelled')}
+                onClick={cancelOrder}
               />
             </div>
           </DropdownConfirm>

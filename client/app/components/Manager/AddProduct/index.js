@@ -20,6 +20,7 @@ const taxableSelect = [
 ];
 
 const AddProduct = props => {
+
   const {
     user,
     productFormData,
@@ -27,7 +28,8 @@ const AddProduct = props => {
     productChange,
     addProduct,
     brands,
-    image
+    image,
+    kyc
   } = props;
 
   const handleSubmit = event => {
@@ -43,137 +45,145 @@ const AddProduct = props => {
       button.textContent = "Add Product";
     }, 5000);
   };
-
+  const verified = kyc ? kyc.status : null;
   return (
     <div className='add-product'>
-      <form onSubmit={handleSubmit} noValidate>
-        <Row>
-          <Col xs='12' lg='6'>
-            <Input
-              type={'text'}
-              error={formErrors['sku']}
-              label={'Sku'}
-              name={'sku'}
-              placeholder={'Product Sku'}
-              value={productFormData.sku}
-              onInputChange={(name, value) => {
-                productChange(name, value);
-              }}
-            />
-          </Col>
-          <Col xs='12' lg='6'>
-            <Input
-              type={'text'}
-              error={formErrors['name']}
-              label={'Name'}
-              name={'name'}
-              placeholder={'Product Name'}
-              value={productFormData.name}
-              onInputChange={(name, value) => {
-                productChange(name, value);
-              }}
-            />
-          </Col>
-          <Col xs='12' md='12'>
-            <Input
-              type={'textarea'}
-              error={formErrors['description']}
-              label={'Description'}
-              name={'description'}
-              placeholder={'Product Description'}
-              value={productFormData.description}
-              onInputChange={(name, value) => {
-                productChange(name, value);
-              }}
-            />
-          </Col>
-          <Col xs='12' lg='6'>
-            <Input
-              type={'number'}
-              error={formErrors['quantity']}
-              label={'Quantity'}
-              name={'quantity'}
-              decimals={false}
-              placeholder={'Product Quantity'}
-              value={productFormData.quantity}
-              onInputChange={(name, value) => {
-                productChange(name, value);
-              }}
-            />
-          </Col>
-          <Col xs='12' lg='6'>
-            <Input
-              type={'number'}
-              error={formErrors['price']}
-              label={'Price (Rs)'}
-              name={'price'}
-              min={1}
-              placeholder={'Product Price'}
-              value={productFormData.price}
-              onInputChange={(name, value) => {
-                productChange(name, value);
-              }}
-            />
-          </Col>
-          <Col xs='12' md='12'>
-            <SelectOption
-              error={formErrors['taxable']}
-              label={'Taxable'}
-              name={'taxable'}
-              options={taxableSelect}
-              value={productFormData.taxable}
-              handleSelectChange={value => {
-                productChange('taxable', value);
-              }}
-            />
-          </Col>
-          <Col xs='12' md='12'>
-            <SelectOption
-              disabled={user.role === ROLES.Merchant}
-              error={formErrors['brand']}
-              name={'brand'}
-              label={'Select Brand'}
-              value={
-                user.role === ROLES.Merchant ? brands[1] : productFormData.brand
-              }
-              options={brands}
-              handleSelectChange={value => {
-                productChange('brand', value);
-              }}
-            />
-          </Col>
-          <Col xs='12' md='12'>
-            <Input
-              type={'file'}
-              error={formErrors['file']}
-              name={'image'}
-              label={'file - Max size 2MB'}
-              placeholder={'Please Upload Image'}
-              value={image}
-              onInputChange={(name, value) => {
-                productChange(name, value);
-              }}
-            />
-          </Col>
-          {
-            user.role === ROLES.Admin && (
-              <Col xs='12' md='12' className='my-2'>
-                <Switch
-                  id={'active-product'}
-                  name={'isActive'}
-                  label={'Active?'}
-                  checked={productFormData.isActive}
-                  toggleCheckboxChange={value => productChange('isActive', value)}
+      {
+        verified !== 'Approved' ? (
+          <div className='alert alert-info mb-4'>
+            Your KYC is currently in <strong>{verified}</strong> status. You need to have an <strong>Approved</strong> KYC to add products.
+          </div>
+        ) :
+          <form onSubmit={handleSubmit} noValidate>
+            <Row>
+              <Col xs='12' lg='6'>
+                <Input
+                  type={'text'}
+                  error={formErrors['sku']}
+                  label={'Sku'}
+                  name={'sku'}
+                  placeholder={'Product Sku'}
+                  value={productFormData.sku}
+                  onInputChange={(name, value) => {
+                    productChange(name, value);
+                  }}
                 />
               </Col>
-            )
-          }
-        </Row>
-        <hr />
-        <div className='add-product-actions'>
-          <Button type='submit' id="addProductBtn" text='Add Product' />
-        </div>
-      </form>
+              <Col xs='12' lg='6'>
+                <Input
+                  type={'text'}
+                  error={formErrors['name']}
+                  label={'Name'}
+                  name={'name'}
+                  placeholder={'Product Name'}
+                  value={productFormData.name}
+                  onInputChange={(name, value) => {
+                    productChange(name, value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' md='12'>
+                <Input
+                  type={'textarea'}
+                  error={formErrors['description']}
+                  label={'Description'}
+                  name={'description'}
+                  placeholder={'Product Description'}
+                  value={productFormData.description}
+                  onInputChange={(name, value) => {
+                    productChange(name, value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' lg='6'>
+                <Input
+                  type={'number'}
+                  error={formErrors['quantity']}
+                  label={'Quantity'}
+                  name={'quantity'}
+                  decimals={false}
+                  placeholder={'Product Quantity'}
+                  value={productFormData.quantity}
+                  onInputChange={(name, value) => {
+                    productChange(name, value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' lg='6'>
+                <Input
+                  type={'number'}
+                  error={formErrors['price']}
+                  label={'Price (Rs)'}
+                  name={'price'}
+                  min={1}
+                  placeholder={'Product Price'}
+                  value={productFormData.price}
+                  onInputChange={(name, value) => {
+                    productChange(name, value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' md='12'>
+                <SelectOption
+                  error={formErrors['taxable']}
+                  label={'Taxable'}
+                  name={'taxable'}
+                  options={taxableSelect}
+                  value={productFormData.taxable}
+                  handleSelectChange={value => {
+                    productChange('taxable', value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' md='12'>
+                <SelectOption
+                  disabled={user.role === ROLES.Merchant}
+                  error={formErrors['brand']}
+                  name={'brand'}
+                  label={'Select Brand'}
+                  value={
+                    user.role === ROLES.Merchant ? brands[1] : productFormData.brand
+                  }
+                  options={brands}
+                  handleSelectChange={value => {
+                    productChange('brand', value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' md='12'>
+                <Input
+                  type={'file'}
+                  error={formErrors['file']}
+                  name={'image'}
+                  label={'file - Max size 2MB'}
+                  placeholder={'Please Upload Image'}
+                  value={image}
+                  onInputChange={(name, value) => {
+                    productChange(name, value);
+                  }}
+                />
+              </Col>
+              {
+                user.role === ROLES.Admin && (
+                  <Col xs='12' md='12' className='my-2'>
+                    <Switch
+                      id={'active-product'}
+                      name={'isActive'}
+                      label={'Active?'}
+                      checked={productFormData.isActive}
+                      toggleCheckboxChange={value => productChange('isActive', value)}
+                    />
+                  </Col>
+                )
+              }
+            </Row>
+            <hr />
+            <div className='add-product-actions'>
+              <Button type='submit' id="addProductBtn" text='Add Product' />
+            </div>
+          </form>
+      }
+
     </div>
   );
 };

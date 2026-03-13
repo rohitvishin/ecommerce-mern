@@ -22,6 +22,7 @@ const initialState = {
         ifscCode: '',
         cancelCheque: null
     },
+    kyc: null,
     formErrors: {},
     isLoading: false
 };
@@ -39,10 +40,7 @@ const kycReducer = (state = initialState, action) => {
         case FETCH_KYC:
             return {
                 ...state,
-                kycFormData: {
-                    ...state.kycFormData,
-                    ...action.payload
-                }
+                kyc: action.payload
             };
         case CLEAR_KYC:
             return {
