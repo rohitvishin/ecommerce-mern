@@ -26,8 +26,7 @@ const TermsAndConditions = () => {
                             <section className="mb-4">
                                 <h4>1. Introduction</h4>
                                 <p>
-                                    <strong>[zostore.in]</strong> is an online marketplace that
-                                    enables independent merchants to create their own stores and sell
+                                    <strong>[zostore.in]</strong> is an online store that sell
                                     products directly to customers.
                                 </p>
                                 <p>
@@ -40,27 +39,24 @@ const TermsAndConditions = () => {
                                 <h4>2. Definitions</h4>
                                 <ul>
                                     <li><strong>Platform:</strong> The website and services provided by [zostore.in].</li>
-                                    <li><strong>Merchant:</strong> A seller listing products on the platform.</li>
                                     <li><strong>Customer:</strong> A user purchasing products.</li>
                                     <li><strong>User:</strong> Anyone accessing or using the platform.</li>
                                 </ul>
                             </section>
 
                             <section className="mb-4">
-                                <h4>3. Marketplace Nature</h4>
+                                <h4>3. Store Nature</h4>
                                 <p>
-                                    [zostore.in] acts solely as a technology platform connecting
-                                    merchants and customers. We do not manufacture, store, or control
-                                    the products listed by merchants.
+                                    [zostore.in] is an online store that sells products directly to customers. We do not manufacture, store, or control the products listed on our platform.
                                 </p>
                                 <p>
-                                    All transactions are conducted between the merchant and the
+                                    All transactions are conducted between the store and the
                                     customer.
                                 </p>
                             </section>
 
                             <section className="mb-4">
-                                <h4>4. Merchant Responsibilities</h4>
+                                <h4>4. Store Responsibilities</h4>
                                 <ul>
                                     <li>Provide accurate product information</li>
                                     <li>Maintain lawful and compliant business practices</li>
@@ -74,7 +70,7 @@ const TermsAndConditions = () => {
                                 <ul>
                                     <li>Provide accurate personal and delivery information</li>
                                     <li>Use the platform lawfully</li>
-                                    <li>Respect merchant policies and guidelines</li>
+                                    <li>Respect store policies and guidelines</li>
                                 </ul>
                             </section>
 
@@ -87,14 +83,6 @@ const TermsAndConditions = () => {
                                 </p>
                             </section>
 
-                            <section className="mb-4">
-                                <h4>7. Merchant Payouts</h4>
-                                <p>
-                                    Merchant payouts may be processed after successful order
-                                    completion. Processing time may vary depending on payment
-                                    providers.
-                                </p>
-                            </section>
 
                             <section className="mb-4">
                                 <h4>8. Prohibited Activities</h4>

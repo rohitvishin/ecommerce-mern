@@ -24,57 +24,56 @@ const AboutUs = () => {
                             <section className="mb-4">
                                 <h4>Who We Are</h4>
                                 <p>
-                                    zostore is a modern ecommerce platform built for ambitious
-                                    entrepreneurs who refuse to let technical barriers stand in
-                                    the way of their vision. We believe that every entrepreneur
-                                    deserves a powerful, distraction-free online presence —
-                                    without spending months navigating complex setups and
-                                    configurations.
+                                    Welcome to zostore — your go-to online store for
+                                    high-quality products at great prices. We're passionate
+                                    about bringing you a carefully curated selection of products
+                                    that combine style, quality, and value. From everyday
+                                    essentials to standout finds, we've got something for
+                                    everyone.
                                 </p>
                             </section>
 
                             <section className="mb-4">
                                 <h4>Our Mission</h4>
                                 <p>
-                                    Our mission is simple — to offer done-for-you online stores
-                                    that cut through months of process and setup, so you can
-                                    focus on what truly matters: growing your business. We handle
-                                    the technical complexity, so you can channel your energy into
-                                    building your brand and serving your customers.
+                                    Our mission is to make online shopping simple, enjoyable,
+                                    and accessible. We believe you deserve a seamless shopping
+                                    experience — from browsing to checkout to delivery. Every
+                                    product in our store is selected with care, so you can shop
+                                    with confidence knowing you're getting the best.
                                 </p>
                             </section>
 
                             <section className="mb-4">
                                 <h4>What We Offer</h4>
                                 <p>
-                                    zostore is designed to open up a wide range of online
-                                    opportunities for entrepreneurs who are ready to grow. Our
-                                    platform provides:
+                                    At zostore, we're committed to delivering an exceptional
+                                    shopping experience. Here's what sets us apart:
                                 </p>
                                 <ul>
-                                    <li>A hassle-free, ready-to-launch online store</li>
-                                    <li>Zero technical complexity — we take care of the hard parts</li>
-                                    <li>A distraction-free environment to manage and scale your business</li>
-                                    <li>Tools and support to help you reach more customers</li>
+                                    <li>A curated collection of high-quality products</li>
+                                    <li>Competitive prices and regular deals</li>
+                                    <li>Fast, reliable shipping and easy returns</li>
+                                    <li>Dedicated customer support to help you every step of the way</li>
                                 </ul>
                             </section>
 
                             <section className="mb-4">
-                                <h4>Why zostore?</h4>
+                                <h4>Why Shop With Us?</h4>
                                 <p>
-                                    Starting an online business shouldn't require months of
-                                    planning, development, and troubleshooting. At zostore, we
-                                    eliminate those hurdles entirely. Whether you're a first-time
-                                    seller or a seasoned merchant, our platform is built to get
-                                    you online faster, smarter, and with confidence.
+                                    We know you have plenty of options when it comes to online
+                                    shopping. At zostore, we stand out by putting our customers
+                                    first. We handpick every product, offer hassle-free returns,
+                                    and provide friendly support whenever you need it. Your
+                                    satisfaction is our top priority.
                                 </p>
                             </section>
 
                             <section>
                                 <h4>Get in Touch</h4>
                                 <p>
-                                    Have questions or want to learn more about how zostore can
-                                    help you launch your online store? Reach out to us:
+                                    Have a question about an order, a product, or just want to
+                                    say hello? We'd love to hear from you:
                                 </p>
                                 <p>
                                     Email: mail@zostore.in

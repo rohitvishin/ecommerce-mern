@@ -37,7 +37,7 @@ const PrivacyPolicy = () => {
                                     <li>Personal information such as name, email address, and phone number</li>
                                     <li>Shipping and billing addresses</li>
                                     <li>Payment information processed through third-party gateways</li>
-                                    <li>Merchant business information</li>
+                                    <li>Business information</li>
                                     <li>Order and transaction details</li>
                                     <li>Device and browser information</li>
                                 </ul>
@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
 
                                 <ul>
                                     <li>Process orders and payments</li>
-                                    <li>Enable merchants to fulfill customer orders</li>
+                                    <li>Enable the store to fulfill customer orders</li>
                                     <li>Provide customer support</li>
                                     <li>Improve platform performance and user experience</li>
                                     <li>Prevent fraud and unauthorized activity</li>
@@ -64,7 +64,7 @@ const PrivacyPolicy = () => {
                                 <p>We may share information with:</p>
 
                                 <ul>
-                                    <li>Merchants to enable order fulfillment</li>
+                                    <li>The store to enable order fulfillment</li>
                                     <li>Payment gateway providers for processing transactions</li>
                                     <li>Service providers assisting with platform operations</li>
                                     <li>Authorities when required by law</li>
@@ -114,11 +114,11 @@ const PrivacyPolicy = () => {
                             </section>
 
                             <section className="mb-4">
-                                <h4>7. Merchant Responsibilities</h4>
+                                <h4>7. Store Responsibilities</h4>
 
                                 <p>
-                                    Merchants may receive customer information necessary to fulfill
-                                    orders. Merchants must use this information solely for order
+                                    The store may receive customer information necessary to fulfill
+                                    orders. The store must use this information solely for order
                                     processing and must not misuse or share customer data.
                                 </p>
                             </section>

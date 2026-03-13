@@ -18,62 +18,60 @@ const ReturnRefundPolicy = () => {
                             <h1 className="mb-4">Return & Refund Policy</h1>
 
                             <p>
-                                This Return and Refund Policy outlines the conditions under which
-                                customers may request returns or refunds for purchases made through
-                                <strong> [zostore.in]</strong>.
-                            </p>
-
-                            <p>
-                                Since <strong>[zostore.in]</strong> operates as a marketplace,
-                                individual merchants may manage product returns and refunds based on
-                                their store policies.
+                                At <strong>zostore.in</strong>, we want you to be completely
+                                satisfied with your purchase. If something isn't right, we're
+                                here to help. Please read our return and refund policy below.
                             </p>
 
                             <section className="mb-4">
                                 <h4>1. Return Eligibility</h4>
 
-                                <p>Customers may request a return if:</p>
+                                <p>You may request a return if:</p>
 
                                 <ul>
                                     <li>The product received is damaged or defective</li>
-                                    <li>The product received is incorrect</li>
-                                    <li>The product does not match the product description</li>
+                                    <li>You received the wrong item</li>
+                                    <li>The product does not match the description on our website</li>
+                                    <li>You are not satisfied with the product (subject to conditions below)</li>
                                 </ul>
 
                                 <p>
-                                    Return requests must typically be submitted within
-                                    <strong> 7days</strong> of delivery depending on the
-                                    merchant's policy.
+                                    Return requests must be raised within
+                                    <strong> 7 days</strong> of delivery. Items must be unused,
+                                    in their original packaging, and with all tags intact.
                                 </p>
                             </section>
 
                             <section className="mb-4">
                                 <h4>2. Non-Returnable Items</h4>
 
-                                <p>The following items may not be eligible for returns:</p>
+                                <p>The following items are not eligible for returns:</p>
 
                                 <ul>
-                                    <li>Used or damaged products caused by the customer</li>
-                                    <li>Digital products or downloadable content</li>
+                                    <li>Products that have been used, washed, or altered</li>
+                                    <li>Innerwear, swimwear, and personal hygiene products</li>
                                     <li>Personalized or custom-made items</li>
-                                    <li>Items marked as non-returnable by the merchant</li>
+                                    <li>Gift cards and downloadable products</li>
+                                    <li>Items marked as "Final Sale" or "Non-Returnable" on the product page</li>
                                 </ul>
                             </section>
 
                             <section className="mb-4">
-                                <h4>3. Return Process</h4>
+                                <h4>3. How to Request a Return</h4>
 
-                                <p>To request a return:</p>
+                                <p>To initiate a return:</p>
 
-                                <ul>
-                                    <li>Contact the merchant through the platform</li>
-                                    <li>Provide order details and reason for return</li>
-                                    <li>Submit images if the product is damaged or incorrect</li>
-                                </ul>
+                                <ol>
+                                    <li>Log in to your account and go to your Orders</li>
+                                    <li>Select the item you wish to return and choose a reason</li>
+                                    <li>Upload photos if the product is damaged or incorrect</li>
+                                    <li>Submit your request</li>
+                                </ol>
 
                                 <p>
-                                    The merchant will review the request and provide instructions for
-                                    returning the item if the request is approved.
+                                    Our team will review your request and respond within
+                                    <strong> 2–3 business days</strong>. Once approved, we will
+                                    arrange a pickup or provide return shipping instructions.
                                 </p>
                             </section>
 
@@ -81,70 +79,69 @@ const ReturnRefundPolicy = () => {
                                 <h4>4. Refund Process</h4>
 
                                 <p>
-                                    Once the returned product is received and verified by the
-                                    merchant, refunds may be processed.
+                                    Once we receive and inspect the returned item, your refund
+                                    will be processed within <strong>5–7 business days</strong>.
                                 </p>
 
-                                <p>Refunds may be issued through:</p>
+                                <p>Refunds will be issued to:</p>
 
                                 <ul>
-                                    <li>Original payment method</li>
-                                    <li>Store credit (if applicable)</li>
+                                    <li>Your original payment method (credit/debit card, UPI, net banking, etc.)</li>
+                                    <li>Store credit or wallet (if you prefer a faster refund)</li>
                                 </ul>
 
                                 <p>
-                                    Refund processing times may vary depending on the payment
-                                    provider and banking systems.
+                                    Please note that your bank may take an additional 3–5 business
+                                    days to reflect the refund in your account.
                                 </p>
                             </section>
 
                             <section className="mb-4">
-                                <h4>5. Shipping Costs</h4>
+                                <h4>5. Exchanges</h4>
 
                                 <p>
-                                    Return shipping costs may be covered by the merchant if the
-                                    product is defective, damaged, or incorrect.
-                                </p>
-
-                                <p>
-                                    If the return is requested for other reasons, the customer may be
-                                    responsible for return shipping costs.
+                                    We currently do not offer direct exchanges. If you'd like a
+                                    different size, colour, or product, please return the original
+                                    item and place a new order.
                                 </p>
                             </section>
 
                             <section className="mb-4">
-                                <h4>6. Platform Role</h4>
+                                <h4>6. Shipping Costs</h4>
 
                                 <p>
-                                    <strong>[zostore.in]</strong> provides the technology platform
-                                    connecting merchants and customers.
+                                    If the return is due to a defective, damaged, or incorrect
+                                    item, we will cover the return shipping costs.
                                 </p>
 
                                 <p>
-                                    While we may assist in dispute resolution, the final return or
-                                    refund decision is typically made by the merchant according to
-                                    their policies.
+                                    For all other returns (e.g., change of mind), a shipping fee
+                                    may be deducted from your refund amount.
                                 </p>
                             </section>
 
                             <section className="mb-4">
-                                <h4>7. Disputes</h4>
+                                <h4>7. Cancellations</h4>
 
                                 <p>
-                                    If a return or refund dispute arises, customers may contact the
-                                    platform support team for assistance.
+                                    Orders can be cancelled before they are shipped. Once an order
+                                    has been dispatched, it cannot be cancelled — you may request a
+                                    return after delivery instead.
                                 </p>
 
                                 <p>
-                                    The platform may review the case and attempt to facilitate a fair
-                                    resolution.
+                                    Refunds for cancelled orders will be processed within
+                                    <strong> 3–5 business days</strong> to your original payment method.
                                 </p>
                             </section>
 
                             <section>
                                 <h4>8. Contact Us</h4>
 
-                                <p>If you have questions about returns or refunds, please contact:</p>
+                                <p>
+                                    If you have any questions about returns, refunds, or need help
+                                    with an order, please reach out to us:
+                                </p>
 
                                 <p>Email: mail@zostore.in</p>
 
